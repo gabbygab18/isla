@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   ISLA — brand tokens carried over from the Blade build.
+   Palette = the four supplied brand swatches (cream / white / rose / sage)
+   plus the supporting --ink neutral. Type is now Satoshi (display) +
+   Geist (body) + Geist Mono (captions).
+   ========================================================================== */
+
+:root {
+    --cream: #fdf7ef;
+    --white: #ffffff;
+    --rose: #db9496;
+    --sage: #8f9d77;
+    --ink: #2b2723;
+    --ink-soft: #6b6259;
+    --rose-deep: #c17579;
+    --rose-soft: #f2dcdd;
+    --sage-deep: #6f7d5c;
+    --sage-soft: #e6e9db;
+    --hairline: rgba(43, 39, 35, 0.16);
+    --hairline-soft: rgba(43, 39, 35, 0.09);
+    --on-inverse-soft: rgba(253, 247, 239, 0.14);
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 84px;
+    }
+
+    body {
+        @apply bg-cream text-ink font-sans antialiased;
+        font-size: 17px;
+        line-height: 1.5;
+        letter-spacing: -0.01em;
+    }
+
+    ::selection {
+        @apply bg-rose-soft text-ink;
+    }
+
+    :focus-visible {
+        outline: 2.5px solid var(--ink);
+        outline-offset: 3px;
+        border-radius: 4px;
+    }
+}
+
+@layer components {
+
+    /* ---- type hierarchy (ported from design.md tokens) ---- */
+    .t-display-xl {
+        @apply font-display font-medium tracking-[-0.03em] leading-[1.04];
+        font-size: clamp(2.6rem, 5.4vw, 4.4rem);
+    }
+
+    .t-display-lg {
+        @apply font-display font-medium tracking-[-0.025em] leading-[1.08];
+        font-size: clamp(2.1rem, 4vw, 3.2rem);
+    }
+
+    .t-headline {
+        @apply font-display font-medium tracking-[-0.02em] leading-[1.14];
+        font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    }
+
+    .t-card-title {
+        @apply font-display font-bold tracking-[-0.01em];
+        font-size: 1.25rem;
+    }
+
+    .t-eyebrow {
+        @apply font-mono uppercase font-medium;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+    }
+
+    .t-caption {
+        @apply font-mono uppercase;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+    }
+
+    .t-body-lg {
+        font-size: 19px;
+        line-height: 1.55;
+    }
+
+    .t-body-sm {
+        font-size: 14.5px;
+        line-height: 1.55;
+    }
+
+    /* ---- shared layout primitives ---- */
+    .container-site {
+        @apply mx-auto w-full max-w-container px-6 md:px-8;
+    }
+
+    .section {
+        @apply py-16 md:py-24;
+    }
+
+    .section-tight {
+        @apply py-10 md:py-14;
+    }
+
+    .block-rose {
+        @apply bg-rose-soft rounded-xl p-8 md:p-14;
+    }
+
+    .block-sage {
+        @apply bg-sage-soft rounded-xl p-8 md:p-14;
+    }
+
+    .block-ink {
+        @apply bg-ink text-cream rounded-xl p-8 md:p-14;
+    }
+}
+
+/* Hide scrollbars on marquee-style tracks */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

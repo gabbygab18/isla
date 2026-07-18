@@ -1,0 +1,145 @@
+import { Link, usePage } from '@inertiajs/react';
+import { motion } from 'framer-motion';
+import { ArrowRight, Check } from 'lucide-react';
+import SiteLayout from '@/Layouts/SiteLayout';
+import RevealText from '@/components/scrollxui/RevealText';
+import Showcase from '@/components/scrollxui/Showcase';
+import SpotlightCard from '@/components/scrollxui/SpotlightCard';
+import StatsCount from '@/components/scrollxui/StatsCount';
+import CtaBand from '@/components/site/CtaBand';
+import Icon from '@/components/site/Icon';
+import PageHero from '@/components/site/PageHero';
+import SectionHead from '@/components/site/SectionHead';
+import { makeSetting } from '@/lib/utils';
+
+export default function About({ benefits = [], audiences = [] }) {
+    const setting = makeSetting(usePage().props?.settings);
+
+    const stats = [1, 2, 3, 4].map((n) => ({
+        value: setting(`about_stat_${n}_value`, ['20+ hrs', '1–2 wks', '4', 'Lifetime'][n - 1]),
+        label: setting(`about_stat_${n}_label`, [
+            'given back to a typical team, most weeks',
+            'from discovery call to onboarded',
+            'sectors we build dedicated assistants around',
+            'replacement guarantee — no cap on timing',
+        ][n - 1]),
+    }));
+
+    return (
+        <SiteLayout title="About Us" description={setting('about_intro', 'Isla is a managed virtual staffing partner for Australian businesses, run by a Philippines-based team.')}>
+            <PageHero
+                crumbs={[{ label: 'About' }]}
+                eyebrow={setting('about_eyebrow', 'About Isla')}
+                heading={setting('about_heading', "Built by people who've done the admin themselves")}
+                lede={setting('about_intro', 'Isla started with a simple observation: the businesses that need the most careful admin support were being served by agencies built for generic inboxes. We built something narrower, on purpose.')}
+            />
+
+            {/* our story — scrollxui showcase (media/text feature row) */}
+            <section className="section-tight">
+                <div className="container-site">
+                    <Showcase
+                        items={[
+                            {
+                                media: (
+                                    <img
+                                        src={setting('about_image', 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1000&q=80&auto=format&fit=crop')}
+                                        alt="The Isla team collaborating"
+                                        className="aspect-[4/3.4] w-full rounded-xl object-cover shadow-float"
+                                    />
+                                ),
+                                text: (
+                                    <div>
+                                        <p className="t-eyebrow mb-3 text-sage-deep">{setting('about_story_eyebrow', 'Our story')}</p>
+                                        <RevealText text={setting('about_story_heading', 'A managed team, not a marketplace')} className="t-headline" />
+                                        <p className="mt-5 leading-relaxed text-ink-soft">
+                                            {setting('about_story_body_1', "Isla is a managed virtual staffing partner for Australian businesses, run by a Philippines-based team with an Australian-facing operating model. We're not a marketplace of freelancers and we're not a call-centre with a slick landing page — we place one dedicated assistant with your business, brief them on your sector before they ever touch a live account, and manage the relationship for as long as you need us to.")}
+                                        </p>
+                                        <p className="mt-4 leading-relaxed text-ink-soft">
+                                            {setting('about_story_body_2', "Every assistant we place works within Australian business hours, is briefed on the compliance and confidentiality standards your sector expects, and comes with Isla's lifetime replacement guarantee — because the fit mattering more than the contract is the whole point.")}
+                                        </p>
+                                    </div>
+                                ),
+                            },
+                        ]}
+                    />
+                </div>
+            </section>
+
+            {/* at a glance — scrollxui statscount */}
+            <section className="section">
+                <div className="container-site">
+                    <motion.div
+                        initial={{ opacity: 0, y: 32 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        className="block-ink"
+                    >
+                        <p className="t-eyebrow mb-3">{setting('about_stats_eyebrow', 'At a glance')}</p>
+                        <RevealText text={setting('about_stats_heading', 'What working with Isla actually looks like')} className="t-headline max-w-xl" />
+                        <StatsCount stats={stats} onDark className="mt-10" />
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* values — scrollxui spotlightcard */}
+            <section className="section-tight">
+                <div className="container-site">
+                    <SectionHead
+                        eyebrow={setting('about_values_eyebrow', 'What we hold ourselves to')}
+                        heading={setting('about_values_heading', 'Straightforward, on purpose')}
+                        intro={setting('about_values_intro', 'The same four commitments show up in every engagement, regardless of sector or size.')}
+                    />
+                    <div className="grid gap-5 sm:grid-cols-2">
+                        {benefits.map((benefit) => (
+                            <SpotlightCard key={benefit.id}>
+                                <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-rose-soft text-rose-deep">
+                                    <Check className="h-4.5 w-4.5 h-[18px] w-[18px]" strokeWidth={2.4} />
+                                </span>
+                                <h3 className="t-card-title">{benefit.title}</h3>
+                                <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">{benefit.summary}</p>
+                            </SpotlightCard>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* industries */}
+            <section className="section-tight">
+                <div className="container-site">
+                    <SectionHead
+                        eyebrow={setting('audiences_eyebrow', 'Who we work with')}
+                        eyebrowColor="text-sage-deep"
+                        heading={setting('about_industries_heading', 'The industries we build assistants around')}
+                    />
+                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                        {audiences.map((audience, i) => (
+                            <motion.div
+                                key={audience.id}
+                                initial={{ opacity: 0, y: 22 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.45, delay: i * 0.06 }}
+                            >
+                                <Link
+                                    href={`/who-we-work-with/${audience.slug}`}
+                                    className="group flex h-full flex-col rounded-lg border border-hairline-soft bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-card"
+                                >
+                                    <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-sage-soft text-sage-deep">
+                                        <Icon name={audience.icon} className="h-[18px] w-[18px]" />
+                                    </span>
+                                    <h3 className="font-display text-[16px] font-bold">{audience.title}</h3>
+                                    <span className="mt-3 inline-flex items-center gap-1.5 text-[13.5px] font-bold text-sage-deep">
+                                        Learn more <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" strokeWidth={2.4} />
+                                    </span>
+                                </Link>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <CtaBand />
+        </SiteLayout>
+    );
+}
