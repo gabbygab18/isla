@@ -23,7 +23,10 @@ export default function Home({ audiences = [], services = [], pricingPlans = [],
     const heroImage = setting('hero_image', 'https://images.unsplash.com/photo-1766066014237-00645c74e9c6?w=1200&q=80&auto=format&fit=crop');
 
     return (
-        <SiteLayout description={setting('hero_subtitle', 'Isla places dedicated virtual assistants for NDIS providers, healthcare and allied health practices, and growing Australian businesses.')}>
+        <SiteLayout
+            title={setting('home_title', 'Isla — Managed Virtual Staffing for Growing Australian Businesses')}
+            description={setting('hero_subtitle', 'Isla places dedicated virtual assistants for NDIS providers, healthcare and allied health practices, and growing Australian businesses.')}
+        >
             {/* ── HERO ─────────────────────────────────────────────── */}
             <section className="pt-12 md:pt-20">
                 <div className="container-site grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
@@ -47,7 +50,7 @@ export default function Home({ audiences = [], services = [], pricingPlans = [],
                             transition={{ duration: 0.55, delay: 0.35 }}
                             className="t-body-lg mt-6 max-w-xl text-ink-soft"
                         >
-                            {setting('hero_subtitle', 'Isla places dedicated virtual assistants for NDIS providers, healthcare and allied health practices, and growing Australian businesses — people who understand participant confidentiality and compliance paperwork from day one.')}
+                            {setting('hero_subtitle', 'Isla places dedicated virtual assistants for NDIS providers, healthcare and allied health practices, and growing Australian businesses — supported by structured, sector-aware onboarding and ongoing workforce management.')}
                         </motion.p>
                         <motion.div
                             initial={{ opacity: 0, y: 16 }}
@@ -97,10 +100,10 @@ export default function Home({ audiences = [], services = [], pricingPlans = [],
                                         <Clock className="h-7 w-7 text-rose-deep" strokeWidth={2} />
                                         <div>
                                             <strong className="block font-display text-lg font-bold leading-tight">
-                                                {setting('hero_badge_strong', '20+ hrs')}
+                                                {setting('hero_badge_strong', 'Dedicated')}
                                             </strong>
                                             <span className="text-[13px] text-ink-soft">
-                                                {setting('hero_badge_text', 'given back to your team, most weeks')}
+                                                {setting('hero_badge_text', 'to your business during agreed working hours')}
                                             </span>
                                         </div>
                                     </div>
@@ -194,11 +197,11 @@ export default function Home({ audiences = [], services = [], pricingPlans = [],
                         className="block-sage"
                     >
                         <p className="t-eyebrow mb-3">{setting('process_eyebrow', 'How it works')}</p>
-                        <RevealText text={setting('process_heading', 'From discovery call to onboarded, in about two weeks')} className="t-headline max-w-xl" />
+                        <RevealText text={setting('process_heading', 'How the partnership works')} className="t-headline max-w-xl" />
                         <p className="mt-3 max-w-xl opacity-80">
                             {setting('process_intro', 'A short, structured path — no lengthy procurement process, no ambiguity about what happens next.')}
                         </p>
-                        <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                        <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                             {processSteps.map((step, i) => (
                                 <motion.div
                                     key={step.id}

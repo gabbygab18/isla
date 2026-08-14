@@ -61,7 +61,7 @@
           <h2 class="t-display-lg">{{ $service->title }} roles you can outsource</h2>
           <p class="t-body-lg" style="max-width:720px; margin:16px auto 0; opacity:.8;">
             Every role below can be filled by a dedicated Isla assistant — matched to your business,
-            working your hours, backed by our lifetime replacement guarantee.
+            working an agreed schedule aligned with your hours, and backed by ongoing replacement and continuity support.
           </p>
         </div>
         <div class="roles-grid">

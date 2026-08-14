@@ -91,7 +91,7 @@ export default function ServiceShow({ service, related = [] }) {
                             eyebrow="Roles we support"
                             eyebrowColor="text-sage-deep"
                             heading={`${service.title} roles you can outsource`}
-                            intro="Every role below can be filled by a dedicated Isla assistant — matched to your business, working your hours, backed by our lifetime replacement guarantee."
+                            intro="Every role below can be filled by a dedicated Isla assistant — matched to your business, working an agreed schedule aligned with your hours, and backed by ongoing replacement and continuity support."
                         />
                         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                             {service.roles.map((role, i) => (

@@ -100,4 +100,3 @@ from the build environment — behaviour and naming match.)
   chosen slot is prepended to the enquiry message on submit.
 - Enquiry form posts to the same `/contact` endpoint → `ContactMessage`,
   with server-side validation errors and the success flash rendered inline.
-# isla

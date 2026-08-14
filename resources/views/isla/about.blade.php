@@ -13,8 +13,8 @@
         <span>About</span>
       </nav>
       <p class="t-eyebrow detail__eyebrow">{{ setting('about_eyebrow', 'About Isla') }}</p>
-      <h1 class="t-display-lg">{{ setting('about_heading', "Built by people who've done the admin themselves") }}</h1>
-      <p class="t-body-lg detail__lede">{{ setting('about_intro', "Isla started with a simple observation: the businesses that need the most careful admin support were being served by agencies built for generic inboxes. We built something narrower, on purpose.") }}</p>
+      <h1 class="t-display-lg">{{ setting('about_heading', "Built by people who understand the work behind business growth") }}</h1>
+      <p class="t-body-lg detail__lede">{{ setting('about_intro', "Isla was built from hands-on experience supporting Australian businesses where administration, compliance, workforce coordination, documentation and client communication could not be treated as simple back-office tasks.") }}</p>
     </div>
   </section>
 
@@ -34,43 +34,16 @@
         </div>
         <div class="reveal">
           <p class="t-eyebrow" style="color:var(--rose-deep)">{{ setting('about_story_eyebrow', 'Our story') }}</p>
-          <h2 class="t-headline">{{ setting('about_story_heading', "A managed team, not a marketplace") }}</h2>
+          <h2 class="t-headline">{{ setting('about_story_heading', "A managed staffing partner, not a freelancer marketplace") }}</h2>
           <div class="prose" style="margin-top:14px;">
-            <p>{{ setting('about_story_body_1', "Isla is a managed virtual staffing partner for Australian businesses, run by a Philippines-based team with an Australian-facing operating model. We're not a marketplace of freelancers and we're not a call-centre with a slick landing page — we place one dedicated assistant with your business, brief them on your sector before they ever touch a live account, and manage the relationship for as long as you need us to.") }}</p>
-            <p>{{ setting('about_story_body_2', "Every assistant we place works within Australian business hours, is briefed on the compliance and confidentiality standards your sector expects, and comes with Isla's lifetime replacement guarantee — because the fit mattering more than the contract is the whole point.") }}</p>
+            <p>{{ setting('about_story_body_1', "We saw capable business owners and leaders spending too much time managing recruitment, onboarding, payroll, systems, follow-ups and everyday operational work. Traditional outsourcing models often provided a candidate but left the client responsible for everything that came afterwards. Isla was created to provide a more accountable solution: capable offshore professionals supported by structured recruitment, onboarding, workforce management and ongoing operational oversight.") }}</p>
+            <p>{{ setting('about_story_body_2', "With a freelancer marketplace, the service often ends after an introduction. With Isla, that is where the partnership begins. Your dedicated professional works an agreed schedule aligned with your Australian operating hours, while Isla provides the workforce infrastructure behind them — payroll administration, HR support, account management, IT assistance, productivity oversight and performance management.") }}</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  {{-- STATS — block-ink --}}
-  <section class="section section-tight">
-    <div class="container">
-      <div class="block block-ink reveal">
-        <p class="t-eyebrow" style="text-align:center;">{{ setting('about_stats_eyebrow', 'At a glance') }}</p>
-        <h2 class="t-headline" style="text-align:center;">{{ setting('about_stats_heading', 'What working with Isla actually looks like') }}</h2>
-        <div class="stat-grid">
-          <div class="stat-grid__item">
-            <strong>{{ setting('about_stat_1_value', '20+ hrs') }}</strong>
-            <span>{{ setting('about_stat_1_label', 'given back to a typical team, most weeks') }}</span>
-          </div>
-          <div class="stat-grid__item">
-            <strong>{{ setting('about_stat_2_value', '1–2 wks') }}</strong>
-            <span>{{ setting('about_stat_2_label', 'from discovery call to onboarded') }}</span>
-          </div>
-          <div class="stat-grid__item">
-            <strong>{{ setting('about_stat_3_value', '4') }}</strong>
-            <span>{{ setting('about_stat_3_label', 'sectors we build dedicated assistants around') }}</span>
-          </div>
-          <div class="stat-grid__item">
-            <strong>{{ setting('about_stat_4_value', 'Lifetime') }}</strong>
-            <span>{{ setting('about_stat_4_label', 'replacement guarantee — no cap on timing') }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   {{-- VALUES — block-sage checklist, reuses Benefit content --}}
   <section class="section" style="padding-top:0;">
@@ -80,7 +53,7 @@
           <div>
             <p class="t-eyebrow">{{ setting('about_values_eyebrow', 'What we hold ourselves to') }}</p>
             <h2 class="t-headline">{{ setting('about_values_heading', "Straightforward, on purpose") }}</h2>
-            <p class="t-subhead" style="margin-top:10px; opacity:.8;">{{ setting('about_values_intro', "The same four commitments show up in every engagement, regardless of sector or size.") }}</p>
+            <p class="t-subhead" style="margin-top:10px; opacity:.8;">{{ setting('about_values_intro', "The same commitments show up in every engagement, regardless of sector or size.") }}</p>
           </div>
           <ul class="checklist">
             @foreach ($benefits as $benefit)

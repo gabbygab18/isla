@@ -43,6 +43,18 @@ class HandleInertiaRequests extends Middleware
         }
 
         return array_merge(parent::share($request), [
+            // Keeps the browser-tab title in step with the server-rendered
+            // <title> after Inertia hydrates and on client-side navigation.
+            'seo' => function () use ($request) {
+                $seo = \App\Support\Seo::build($request);
+
+                return [
+                    'title'       => $seo['title'],
+                    'description' => $seo['description'],
+                    'canonical'   => $seo['canonical'],
+                    'image'       => $seo['image'],
+                ];
+            },
             'settings' => $settings,
             'navItems' => $navItems,
             'flash' => [

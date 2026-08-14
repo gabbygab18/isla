@@ -16,4 +16,18 @@ export default defineConfig({
             '@': path.resolve(__dirname, 'resources/js'),
         },
     },
+    build: {
+        rollupOptions: {
+            output: {
+                // Split the vendor libraries out of the app bundle. React and
+                // Inertia change rarely, so returning visitors reuse a cached
+                // copy instead of re-downloading everything after each deploy.
+                manualChunks: {
+                    react: ['react', 'react-dom'],
+                    inertia: ['@inertiajs/react'],
+                    motion: ['framer-motion'],
+                },
+            },
+        },
+    },
 });

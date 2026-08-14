@@ -5,19 +5,20 @@ import { BentoGrid, BentoItem } from '@/components/scrollxui/BentoGrid';
 import CtaBand from '@/components/site/CtaBand';
 import Icon from '@/components/site/Icon';
 import PageHero from '@/components/site/PageHero';
+import TrustBar from '@/components/site/TrustBar';
 import { makeSetting } from '@/lib/utils';
 
 export default function AudiencesIndex({ audiences = [] }) {
     const setting = makeSetting(usePage().props?.settings);
 
     return (
-        <SiteLayout title="Who We Work With" description={setting('audiences_intro', 'The sectors Isla builds dedicated assistants around.')}>
+        <SiteLayout title="Industries We Support" description={setting('audiences_intro', 'The industries Isla builds dedicated professionals around.')}>
             <PageHero
-                crumbs={[{ label: 'Who We Work With' }]}
-                eyebrow={setting('audiences_eyebrow', 'Who we work with')}
+                crumbs={[{ label: 'Industries' }]}
+                eyebrow={setting('audiences_eyebrow', 'Industries')}
                 eyebrowColor="text-sage-deep"
-                heading={setting('audiences_heading', "Built for the work that can't be generic")}
-                lede={setting('audiences_intro', 'Most virtual staffing agencies are horizontal generalists. Isla is built around the groups whose paperwork actually carries risk.')}
+                heading={setting('audiences_heading', 'Industries We Support')}
+                lede={setting('audiences_intro', 'Dedicated offshore professionals prepared around the systems, standards and pace of your industry.')}
             />
 
             <section className="pb-4 pt-6">
@@ -39,6 +40,12 @@ export default function AudiencesIndex({ audiences = [] }) {
                             </BentoItem>
                         ))}
                     </BentoGrid>
+                </div>
+            </section>
+
+            <section className="section-tight pt-0">
+                <div className="container-site">
+                    <TrustBar />
                 </div>
             </section>
 

@@ -28,12 +28,12 @@ export default function HowItWorks({ processSteps = [] }) {
     ];
 
     return (
-        <SiteLayout title="How it Works" description={setting('process_heading', 'From discovery call to onboarded, in about two weeks')}>
+        <SiteLayout title="How it Works" description={setting('process_heading', 'How the partnership works')}>
             <PageHero
                 crumbs={[{ label: 'How it Works' }]}
                 eyebrow={setting('process_eyebrow', 'How it works')}
                 eyebrowColor="text-sage-deep"
-                heading={setting('process_heading', 'From discovery call to onboarded, in about two weeks')}
+                heading={setting('process_heading', 'How the partnership works')}
                 lede={setting('process_intro', 'A short, structured path — no lengthy procurement process, no ambiguity about what happens next.')}
             />
 

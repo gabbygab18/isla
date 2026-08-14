@@ -12,8 +12,7 @@
   body{ margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; background:var(--cream); font-family:'Inter',system-ui,sans-serif; color:var(--ink); padding:20px; }
   .card{ background:var(--white); border:1px solid var(--hairline); border-radius:16px; padding:38px 34px; width:100%; max-width:390px; box-shadow:0 24px 60px -30px rgba(43,39,35,.35); }
   .brand{ display:flex; align-items:center; gap:11px; justify-content:center; margin-bottom:22px; }
-  .brand img{ width:42px; height:42px; border-radius:11px; }
-  .brand span{ font-weight:700; font-size:20px; letter-spacing:.02em; }
+  .brand img{ height:52px; width:auto; }
   h1{ font-size:21px; margin:0 0 4px; text-align:center; }
   .sub{ text-align:center; color:var(--ink-soft); font-size:14px; margin:0 0 24px; }
   label{ display:block; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:6px; }
@@ -28,8 +27,7 @@
 <body>
   <div class="card">
     <div class="brand">
-      <img src="{{ asset('logo.png') }}" alt="">
-      <span>{{ setting('brand_word', 'Isla') }}</span>
+      <img src="{{ asset('logo.png') }}" alt="{{ setting('brand_word', 'Isla') }}">
     </div>
     <h1>Admin sign in</h1>
     <p class="sub">Manage your site content</p>
@@ -54,7 +52,6 @@
       <button type="submit">Sign in</button>
     </form>
 
-    <p class="hint">Default: admin@isla.com.au / password</p>
   </div>
 </body>
 </html>

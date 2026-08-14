@@ -20,7 +20,8 @@ import RevealText from '@/components/scrollxui/RevealText';
 import ScrollAreaPro from '@/components/scrollxui/ScrollAreaPro';
 import SpotlightCard from '@/components/scrollxui/SpotlightCard';
 import StaggerButton from '@/components/scrollxui/StaggerButton';
-import ContactBlock from '@/components/site/ContactBlock';
+import EnquiryForm from '@/components/site/EnquiryForm';
+import Modal from '@/components/site/Modal';
 import PageHero from '@/components/site/PageHero';
 import SectionHead from '@/components/site/SectionHead';
 import TrustBar from '@/components/site/TrustBar';
@@ -39,15 +40,32 @@ function fmtDate(date) {
     return date.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long' });
 }
 
-function Scheduler({ onConfirm }) {
+function Scheduler({ onConfirm, windowDays }) {
     const today = useMemo(() => {
         const d = new Date();
         d.setHours(0, 0, 0, 0);
         return d;
     }, []);
+
+    // Bookings are only offered inside a short rolling window so enquiries
+    // land while they are still front of mind for the sales team. Length is
+    // admin-editable (Settings -> Book a Discovery Call page).
+    const lastBookable = useMemo(() => {
+        const d = new Date(today);
+        d.setDate(d.getDate() + windowDays);
+        return d;
+    }, [today, windowDays]);
+
     const [view, setView] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState('');
+
+    // Only allow paging to months the window actually reaches into.
+    const atFirstMonth =
+        view.getFullYear() === today.getFullYear() && view.getMonth() === today.getMonth();
+    const atLastMonth =
+        view.getFullYear() === lastBookable.getFullYear() &&
+        view.getMonth() === lastBookable.getMonth();
 
     const days = useMemo(() => {
         const firstDow = (new Date(view.getFullYear(), view.getMonth(), 1).getDay() + 6) % 7; // Mon = 0
@@ -56,10 +74,11 @@ function Scheduler({ onConfirm }) {
         for (let d = 1; d <= total; d++) {
             const date = new Date(view.getFullYear(), view.getMonth(), d);
             const isWeekend = date.getDay() === 0 || date.getDay() === 6;
-            cells.push({ date, disabled: isWeekend || date < today });
+            const outsideWindow = date < today || date > lastBookable;
+            cells.push({ date, disabled: isWeekend || outsideWindow });
         }
         return cells;
-    }, [view, today]);
+    }, [view, today, lastBookable]);
 
     const pick = (time) => {
         setSelectedTime(time);
@@ -80,7 +99,7 @@ function Scheduler({ onConfirm }) {
                 <p className="t-caption mt-4 text-ink-soft">Isla Virtual Staffing</p>
                 <h2 className="t-card-title mt-1.5">Discovery Call</h2>
                 <ul className="mt-5 flex flex-col gap-3 text-[14px] text-ink-soft">
-                    <li className="flex items-center gap-2.5"><Clock className="h-4 w-4" strokeWidth={2.2} /> 20 min</li>
+                    <li className="flex items-center gap-2.5"><Clock className="h-4 w-4" strokeWidth={2.2} /> 15 min</li>
                     <li className="flex items-center gap-2.5"><Headset className="h-4 w-4" strokeWidth={2.2} /> Video or phone — your pick</li>
                     <li className="flex items-center gap-2.5"><Globe className="h-4 w-4" strokeWidth={2.2} /> Australian Eastern Time</li>
                 </ul>
@@ -96,8 +115,9 @@ function Scheduler({ onConfirm }) {
                     <button
                         type="button"
                         aria-label="Previous month"
+                        disabled={atFirstMonth}
                         onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))}
-                        className="flex h-9 w-9 items-center justify-center rounded-full border border-hairline transition-colors hover:border-ink"
+                        className="flex h-9 w-9 items-center justify-center rounded-full border border-hairline transition-colors hover:border-ink disabled:cursor-not-allowed disabled:border-hairline-soft disabled:text-ink/25 disabled:hover:border-hairline-soft"
                     >
                         <ChevronLeft className="h-4 w-4" strokeWidth={2.2} />
                     </button>
@@ -107,8 +127,9 @@ function Scheduler({ onConfirm }) {
                     <button
                         type="button"
                         aria-label="Next month"
+                        disabled={atLastMonth}
                         onClick={() => setView(new Date(view.getFullYear(), view.getMonth() + 1, 1))}
-                        className="flex h-9 w-9 items-center justify-center rounded-full border border-hairline transition-colors hover:border-ink"
+                        className="flex h-9 w-9 items-center justify-center rounded-full border border-hairline transition-colors hover:border-ink disabled:cursor-not-allowed disabled:border-hairline-soft disabled:text-ink/25 disabled:hover:border-hairline-soft"
                     >
                         <ChevronRight className="h-4 w-4" strokeWidth={2.2} />
                     </button>
@@ -145,6 +166,11 @@ function Scheduler({ onConfirm }) {
                         ),
                     )}
                 </div>
+                <p className="t-body-sm mt-4 text-ink-soft">
+                    Showing available weekdays up to{' '}
+                    {lastBookable.toLocaleDateString('en-AU', { day: 'numeric', month: 'long' })}.
+                    Need a date further out? Use the enquiry form below.
+                </p>
             </div>
 
             {/* time slots — scrollxui scroll-areapro */}
@@ -184,9 +210,10 @@ function Scheduler({ onConfirm }) {
 export default function BookCall() {
     const setting = makeSetting(usePage().props?.settings);
     const [preferredTime, setPreferredTime] = useState('');
+    const [formOpen, setFormOpen] = useState(false);
 
     const heroChecks = [
-        { icon: Clock, text: '20 minutes, video or phone' },
+        { icon: Clock, text: '15 minutes, video or phone' },
         { icon: CheckCircle2, text: 'No obligation, no card required' },
         { icon: Target, text: 'Walk away with a clear next step either way' },
     ];
@@ -194,7 +221,7 @@ export default function BookCall() {
     return (
         <SiteLayout
             title="Book a Discovery Call"
-            description={setting('book_intro', 'A free 20-minute call to work out what your assistant should own first — no obligation, no card.')}
+            description={setting('book_intro', 'A free 15-minute call to work out what your assistant should own first — no obligation, no card.')}
         >
             <PageHero
                 crumbs={[{ label: 'Book a Discovery Call' }]}
@@ -223,7 +250,10 @@ export default function BookCall() {
             {/* scheduler */}
             <section className="pb-4 pt-6" id="schedule">
                 <div className="container-site">
-                    <Scheduler onConfirm={setPreferredTime} />
+                    <Scheduler
+                        onConfirm={setPreferredTime}
+                        windowDays={Math.max(1, Number(setting('book_window_days', 14)) || 14)}
+                    />
                     {preferredTime && (
                         <motion.div
                             initial={{ opacity: 0, y: 12 }}
@@ -234,36 +264,52 @@ export default function BookCall() {
                                 <p className="t-caption text-sage-deep">Your preferred time</p>
                                 <p className="mt-1 font-display text-[17px] font-bold">{preferredTime}</p>
                             </div>
-                            <StaggerButton href="#book" iconRight={ArrowRight}>
+                            <StaggerButton type="button" onClick={() => setFormOpen(true)} iconRight={ArrowRight}>
                                 Confirm & send details
                             </StaggerButton>
                         </motion.div>
                     )}
+                    {!preferredTime && (
+                        <p className="mt-5 text-center text-[14px] text-ink-soft">
+                            Prefer to skip the calendar?{' '}
+                            <button
+                                type="button"
+                                onClick={() => setFormOpen(true)}
+                                className="font-bold text-rose-deep underline-offset-2 hover:underline"
+                            >
+                                Send us your details
+                            </button>{' '}
+                            and we'll suggest a time.
+                        </p>
+                    )}
                 </div>
             </section>
 
-            {/* booking form */}
-            <div id="book">
-                <ContactBlock
-                    id="book-form"
-                    eyebrow={setting('book_form_eyebrow', 'Get started')}
-                    heading={setting('book_form_heading', 'Tell us about your business')}
-                    intro={setting('book_form_intro', "Send a few details and we'll come back with a time to talk within one business day.")}
-                    formProps={{
-                        sectors: ['NDIS Provider', 'Healthcare & Allied Health', 'Small–Medium Business', 'Construction & Trades', 'Other'],
-                        messageLabel: "What's eating your week right now?",
-                        messagePlaceholder: 'e.g. scheduling, invoicing, participant enquiries, quoting follow-ups...',
-                        submitLabel: 'Book my discovery call',
-                        preferredTime,
-                        extra: preferredTime ? (
-                            <div>
-                                <span className="mb-2 block text-[13.5px] font-semibold">Preferred call time</span>
-                                <div className="rounded-md border border-hairline bg-cream px-4 py-3 text-[15px]">{preferredTime}</div>
-                            </div>
-                        ) : null,
-                    }}
-                />
-            </div>
+            {/* booking form — modal popup on confirm */}
+            <Modal open={formOpen} onClose={() => setFormOpen(false)} label={setting('book_form_heading', 'Tell us about your business')}>
+                <p className="t-eyebrow mb-2 text-rose-deep">{setting('book_form_eyebrow', 'Get started')}</p>
+                <h2 className="t-headline">{setting('book_form_heading', 'Tell us about your business')}</h2>
+                <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
+                    {setting('book_form_intro', "Send a few details and we'll come back with a time to talk within one business day.")}
+                </p>
+                {preferredTime && (
+                    <div className="mt-5">
+                        <span className="mb-2 block text-[13.5px] font-semibold">Preferred call time</span>
+                        <div className="rounded-md border border-hairline bg-cream px-4 py-3 text-[15px]">{preferredTime}</div>
+                    </div>
+                )}
+                <div className="mt-6">
+                    <EnquiryForm
+                        sectors={['NDIS, Aged Care and Community Services', 'Healthcare and Allied Health', 'Construction', 'Engineering', 'Real Estate and Property Management', 'Finance and Accounting', 'Insurance', 'eCommerce and Retail', 'Technology and IT', 'Fitness, Health and Wellness', 'Renewable Energy', 'Other']}
+                        messageLabel="What's eating your week right now?"
+                        messagePlaceholder="e.g. scheduling, invoicing, participant enquiries, quoting follow-ups..."
+                        submitLabel="Book my discovery call"
+                        preferredTime={preferredTime}
+                        successHeading="Your call request is in"
+                        successMessage="Thanks — we'll confirm your discovery call by email within one business day. No card, no obligation."
+                    />
+                </div>
+            </Modal>
 
             {/* what happens next */}
             <section className="section-tight">

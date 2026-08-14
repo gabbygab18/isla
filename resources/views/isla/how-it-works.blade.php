@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'How it Works — ' . setting('brand_word', 'Isla'))
-@section('meta_description', setting('process_heading', 'From discovery call to onboarded, in about two weeks'))
+@section('meta_description', setting('process_heading', 'How the partnership works'))
 
 @section('content')
 <main id="top">
@@ -13,7 +13,7 @@
         <span>How it Works</span>
       </nav>
       <p class="t-eyebrow detail__eyebrow" style="color:var(--sage-deep)">{{ setting('process_eyebrow', 'How it works') }}</p>
-      <h1 class="t-display-lg">{{ setting('process_heading', 'From discovery call to onboarded, in about two weeks') }}</h1>
+      <h1 class="t-display-lg">{{ setting('process_heading', 'How the partnership works') }}</h1>
       <p class="t-body-lg detail__lede">{{ setting('process_intro', 'A short, structured path — no lengthy procurement process, no ambiguity about what happens next.') }}</p>
     </div>
   </section>

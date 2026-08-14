@@ -37,7 +37,6 @@
               <option value="AUD" selected>Australian Dollar (AUD)</option>
               <option value="USD">US Dollar (USD)</option>
               <option value="NZD">New Zealand Dollar (NZD)</option>
-              <option value="GBP">British Pound (GBP)</option>
             </select>
           </div>
           <div class="est-field">
@@ -103,15 +102,15 @@
           </div>
           <div class="est-savings" id="sSavings">
             <svg class="icon"><use href="#i-check"/></svg>
-            <span>You could save <strong id="sSaveAmt">A$0</strong> (<span id="sSavePct">0%</span>) <span id="sSavePer">per month</span></span>
+            <span>Indicative difference of <strong id="sSaveAmt">A$0</strong> <span id="sSavePer">per month</span> vs a typical local hire</span>
           </div>
           <ul class="est-breakdown">
             <li><span>Role</span><strong id="sBdRole">—</strong></li>
             <li><span>Assistant rate</span><strong id="sBdRate">—</strong></li>
-            <li><span>Flat management fee</span><strong id="sBdFee">—</strong></li>
+            
             <li><span>Basis</span><strong>38 hrs / week, AU business hours</strong></li>
           </ul>
-          <p class="est-disclaimer">{{ setting('calc_disclaimer', "Indicative only, based on typical Isla rates, a flat monthly management fee per assistant, and illustrative exchange rates and local salary benchmarks. Your discovery call confirms an exact, written quote for your role and sector.") }}</p>
+          <p class="est-disclaimer">{{ setting('calc_disclaimer', "Indicative only, based on one inclusive hourly rate determined by role, experience level, working hours and service requirements, with illustrative exchange rates and local salary benchmarks. Your discovery call confirms an exact, written quote for your role and sector.") }}</p>
           <a href="{{ route('isla.book-call') }}" class="btn btn-primary btn-block" style="margin-top:18px;">Book a Free Consultation <svg class="icon"><use href="#i-arrow"/></svg></a>
         </div>
       </div>
@@ -128,7 +127,6 @@
             <option value="AUD" selected>Australian Dollar (AUD)</option>
             <option value="USD">US Dollar (USD)</option>
             <option value="NZD">New Zealand Dollar (NZD)</option>
-            <option value="GBP">British Pound (GBP)</option>
           </select>
         </div>
 
@@ -156,7 +154,7 @@
             <svg class="icon"><use href="#i-check"/></svg>
             <span>Your team could save <strong id="tSaveAmt">A$0</strong> (<span id="tSavePct">0%</span>) per month</span>
           </div>
-          <p class="est-disclaimer">{{ setting('calc_disclaimer', "Indicative only, based on typical Isla rates, a flat monthly management fee per assistant, and illustrative exchange rates and local salary benchmarks. Your discovery call confirms an exact, written quote for your roles and sector.") }}</p>
+          <p class="est-disclaimer">{{ setting('calc_disclaimer', "Indicative only, based on one inclusive hourly rate determined by role, experience level, working hours and service requirements, with illustrative exchange rates and local salary benchmarks. Your discovery call confirms an exact, written quote for your roles and sector.") }}</p>
           <a href="{{ route('isla.book-call') }}" class="btn btn-primary btn-block" style="margin-top:18px;">Book a Free Consultation <svg class="icon"><use href="#i-arrow"/></svg></a>
         </div>
       </div>
@@ -169,7 +167,7 @@
       <div class="section__head center reveal">
         <p class="t-eyebrow" style="color:var(--rose-deep)">{{ setting('pricing_eyebrow', 'Pricing') }}</p>
         <h2 class="t-display-lg">Or start from a set plan</h2>
-        <p class="t-body-lg" style="color:var(--ink-soft); margin-top:16px;">Every plan runs on the same flat-fee model as the estimate above.</p>
+        <p class="t-body-lg" style="color:var(--ink-soft); margin-top:16px;">Every plan runs on the same inclusive hourly rate as the estimate above.</p>
       </div>
       <div class="pricing-grid">
         @foreach ($pricingPlans as $plan)
@@ -356,10 +354,9 @@
   var CURRENCY   = {
     AUD: { sym: 'A$',  fx: 1.0  },
     USD: { sym: 'US$', fx: 0.66 },
-    NZD: { sym: 'NZ$', fx: 1.08 },
-    GBP: { sym: '£',   fx: 0.52 }
+    NZD: { sym: 'NZ$', fx: 1.08 }
   };
-  var MGMT_FEE      = {{ (float) setting('calc_management_fee', 650) }};   // AUD / month / assistant
+  var MGMT_FEE      = 0; // inclusive hourly rate — no separate management fee
   var LOCAL_RATE    = {{ (float) setting('calc_local_rate', 42) }};        // AUD / hr local-hire benchmark
   var HOURS_WEEK    = 38;
   var WEEKS_MONTH   = 4.33;
@@ -376,7 +373,7 @@
     qty = qty || 1;
     var hIsla  = islaHourly(catIdx, exp, setup);
     var hLocal = localHourly(exp);
-    var mIsla  = hIsla  * HOURS_WEEK * WEEKS_MONTH + MGMT_FEE;
+    var mIsla  = hIsla  * HOURS_WEEK * WEEKS_MONTH;
     var mLocal = hLocal * HOURS_WEEK * WEEKS_MONTH * 1.25; // + super/leave/overheads
     if (view === 'hourly')  return { isla: (mIsla / (HOURS_WEEK * WEEKS_MONTH)) * qty, local: hLocal * 1.25 * qty };
     if (view === 'annual')  return { isla: mIsla * 12 * qty, local: mLocal * 12 * qty };
@@ -460,13 +457,11 @@
     var save = c.local - c.isla;
     var pct = c.local > 0 ? Math.max(0, Math.round((save / c.local) * 100)) : 0;
     document.getElementById('sSaveAmt').textContent = money(cur.sym, save * cur.fx);
-    document.getElementById('sSavePct').textContent = pct + '%';
     document.getElementById('sSavePer').textContent = per;
 
     document.getElementById('sBdRole').textContent = sRole.value + ' · ' + sExp.options[sExp.selectedIndex].text + ' · ' + sSetup.options[sSetup.selectedIndex].text;
     var h = islaHourly(parseInt(sCategory.value,10), sExp.value, sSetup.value);
     document.getElementById('sBdRate').textContent = money(cur.sym, h * cur.fx) + ' / hr';
-    document.getElementById('sBdFee').textContent = money(cur.sym, MGMT_FEE * cur.fx) + ' / month';
   }
 
   /* ---------- build your team ---------- */

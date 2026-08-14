@@ -60,7 +60,7 @@
           <tbody>
             <tr>
               <td>Pricing model</td>
-              <td class="cmp__isla">One flat management fee</td>
+              <td class="cmp__isla">One inclusive hourly rate</td>
               <td>Hidden % markup</td>
               <td>Salary + super + overheads</td>
             </tr>

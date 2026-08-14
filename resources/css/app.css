@@ -118,6 +118,64 @@
     .block-ink {
         @apply bg-ink text-cream rounded-xl p-8 md:p-14;
     }
+
+    /* ---- rich-text blog body (CKEditor output) ---- */
+    .blog-body {
+        @apply text-[16.5px] leading-relaxed text-ink-soft;
+    }
+
+    .blog-body > * + * {
+        @apply mt-5;
+    }
+
+    .blog-body h2 {
+        @apply t-headline text-ink;
+    }
+
+    .blog-body h3 {
+        @apply t-card-title text-ink;
+    }
+
+    .blog-body strong {
+        @apply font-bold text-ink;
+    }
+
+    .blog-body em {
+        @apply italic;
+    }
+
+    .blog-body a {
+        @apply font-bold text-rose-deep underline;
+    }
+
+    .blog-body ul,
+    .blog-body ol {
+        @apply ml-5 flex flex-col gap-2;
+    }
+
+    .blog-body ul {
+        @apply list-disc;
+    }
+
+    .blog-body ol {
+        @apply list-decimal;
+    }
+
+    .blog-body blockquote {
+        @apply border-l-4 border-rose-deep bg-rose-soft/50 px-5 py-3 italic text-ink;
+    }
+
+    .blog-body img {
+        @apply w-full rounded-lg;
+    }
+
+    .blog-body figure {
+        @apply flex flex-col gap-2;
+    }
+
+    .blog-body figcaption {
+        @apply t-caption text-center text-ink-soft/70;
+    }
 }
 
 /* Hide scrollbars on marquee-style tracks */

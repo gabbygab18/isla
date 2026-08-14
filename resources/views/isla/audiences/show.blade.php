@@ -42,7 +42,7 @@
 
         <aside class="detail__aside reveal">
           <h3>Work with Isla</h3>
-          <p>Book a 20-minute discovery call and we'll scope an assistant around your sector and hours.</p>
+          <p>Book a 15-minute discovery call and we'll scope an assistant around your sector and hours.</p>
           <a href="{{ route('isla.index') }}#book-a-call" class="btn btn-primary btn-block" style="margin-bottom:12px;">
             <svg class="icon"><use href="#i-calendar"/></svg> Book a Discovery Call
           </a>

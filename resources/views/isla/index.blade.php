@@ -9,7 +9,7 @@
       <div class="reveal">
         <p class="t-eyebrow hero__eyebrow">{{ setting('hero_eyebrow', 'Managed virtual staffing for Australian businesses') }}</p>
         <h1 class="t-display-xl">{!! nl2br(e(setting('hero_title', "Delegate the admin.\nProtect the care."))) !!}</h1>
-        <p class="t-body-lg hero__sub">{{ setting('hero_subtitle', 'Isla places dedicated virtual assistants for NDIS providers, healthcare and allied health practices, and growing Australian businesses — people who understand participant confidentiality and compliance paperwork from day one.') }}</p>
+        <p class="t-body-lg hero__sub">{{ setting('hero_subtitle', 'Isla places dedicated virtual assistants for NDIS providers, healthcare and allied health practices, and growing Australian businesses — supported by structured, sector-aware onboarding and ongoing workforce management.') }}</p>
         <div class="hero__ctas">
           <a href="{{ route('isla.book-call') }}" class="btn btn-primary">
             <svg class="icon"><use href="#i-calendar"/></svg>
@@ -28,8 +28,8 @@
         <div class="hero__badge">
           <svg class="icon icon-lg" style="color:var(--rose-deep)"><use href="#i-clock"/></svg>
           <div>
-            <strong>{{ setting('hero_badge_strong', '20+ hrs') }}</strong>
-            <span>{{ setting('hero_badge_text', 'given back to your team, most weeks') }}</span>
+            <strong>{{ setting('hero_badge_strong', 'Dedicated') }}</strong>
+            <span>{{ setting('hero_badge_text', 'to your business during agreed working hours') }}</span>
           </div>
         </div>
       </div>
@@ -96,7 +96,7 @@
     <div class="container">
       <div class="block block-sage reveal">
         <p class="t-eyebrow">{{ setting('process_eyebrow', 'How it works') }}</p>
-        <h2 class="t-headline">{{ setting('process_heading', 'From discovery call to onboarded, in about two weeks') }}</h2>
+        <h2 class="t-headline">{{ setting('process_heading', 'How the partnership works') }}</h2>
         <p class="t-subhead" style="margin-top:10px; max-width:560px;">{{ setting('process_intro', 'A short, structured path — no lengthy procurement process, no ambiguity about what happens next.') }}</p>
         <div class="process">
           @foreach ($processSteps as $step)
@@ -196,7 +196,7 @@
         <div class="cta-band__inner">
           <span class="icon-btn icon-btn-inverse"><svg class="icon icon-lg"><use href="#i-star"/></svg></span>
           <h2 class="t-headline">Ready to lift the admin off your team?</h2>
-          <p class="t-body" style="margin-top:10px;">Book a 20-minute discovery call — no obligation, just a conversation about where the hours are going.</p>
+          <p class="t-body" style="margin-top:10px;">Book a 15-minute discovery call — no obligation, just a conversation about where the hours are going.</p>
           <a href="{{ route('isla.book-call') }}" class="btn btn-on-dark" style="margin-top:14px;">
             <svg class="icon"><use href="#i-calendar"/></svg>
             Book a Discovery Call

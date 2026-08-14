@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Book a Discovery Call — ' . setting('brand_word', 'Isla'))
-@section('meta_description', setting('book_intro', "A free 20-minute call to work out what your assistant should own first — no obligation, no card."))
+@section('meta_description', setting('book_intro', "A free 15-minute call to work out what your assistant should own first — no obligation, no card."))
 
 @section('content')
 <main id="top">
@@ -18,7 +18,7 @@
       <ul class="checklist" style="margin-top:28px; flex-direction:row; flex-wrap:wrap; gap:28px;">
         <li style="align-items:center;">
           <span class="icon-wrap" style="background:var(--sage-deep);"><svg class="icon"><use href="#i-clock"/></svg></span>
-          <span style="font-size:14.5px; font-weight:600;">20 minutes, video or phone</span>
+          <span style="font-size:14.5px; font-weight:600;">15 minutes, video or phone</span>
         </li>
         <li style="align-items:center;">
           <span class="icon-wrap" style="background:var(--sage-deep);"><svg class="icon"><use href="#i-check"/></svg></span>
@@ -51,7 +51,7 @@
             <p class="t-caption" style="color:var(--ink-soft);">{{ setting('brand_word', 'Isla') }} Virtual Staffing</p>
             <h2 class="scheduler__title">Discovery Call</h2>
             <ul class="scheduler__meta">
-              <li><svg class="icon"><use href="#i-clock"/></svg><span>20 min</span></li>
+              <li><svg class="icon"><use href="#i-clock"/></svg><span>15 min</span></li>
               <li><svg class="icon"><use href="#i-headset"/></svg><span>Video or phone — your pick</span></li>
               <li><svg class="icon"><use href="#i-globe"/></svg><span id="schedTz">Australian Eastern Time</span></li>
             </ul>

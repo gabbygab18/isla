@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Isla — Managed Virtual Staffing for Growing Australian Businesses')</title>
-    <meta name="description" content="@yield('meta_description', 'Isla places dedicated virtual assistants for NDIS providers, healthcare and allied health practices, and growing Australian businesses. Flat management fee, lifetime replacement guarantee.')">
+    <meta name="description" content="@yield('meta_description', 'Isla places dedicated virtual assistants for NDIS providers, healthcare and allied health practices, and growing Australian businesses. Managed staffing through one inclusive hourly rate, with ongoing replacement and continuity support.')">
     <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1802,7 +1802,7 @@
                         '/\r\n|\r|\n/',
                         setting(
                             'marquee_items',
-                            "NDIS-aware onboarding\nFlat management fee\nLifetime replacement guarantee\nAU business-hours overlap",
+                            "Sector-aware onboarding\nOne inclusive hourly rate\nOngoing replacement support\nAustralian-aligned working hours",
                         ),
                     ),
                 ),

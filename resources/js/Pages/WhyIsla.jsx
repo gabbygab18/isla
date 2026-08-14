@@ -10,7 +10,7 @@ import SectionHead from '@/components/site/SectionHead';
 import { makeSetting } from '@/lib/utils';
 
 const ROWS = [
-    ['Pricing model', 'One flat management fee', 'Hidden % markup', 'Salary + super + overheads'],
+    ['Pricing model', 'One inclusive hourly rate', 'Hidden % markup', 'Salary + super + overheads'],
     ["Replacement if it's not working", 'check:Lifetime guarantee', '30–90 days, if at all', 'Restart recruitment'],
     ['Time to start', '~2 weeks', '4–6 weeks', '2–3 months'],
     ['Sector-aware onboarding (NDIS / health)', 'check:Built in', 'Rarely', 'You train from scratch'],

@@ -11,6 +11,8 @@
     <div class="stat"><div class="stat__num">{{ $stats['benefits'] }}</div><div class="stat__label">Benefits</div><a href="{{ route('admin.benefits') }}">Manage →</a></div>
     <div class="stat"><div class="stat__num">{{ $stats['pricingPlans'] }}</div><div class="stat__label">Pricing plans</div><a href="{{ route('admin.pricing-plans') }}">Manage →</a></div>
     <div class="stat"><div class="stat__num">{{ $stats['faqs'] }}</div><div class="stat__label">FAQs</div><a href="{{ route('admin.faqs') }}">Manage →</a></div>
+    <div class="stat"><div class="stat__num">{{ $stats['testimonials'] }}</div><div class="stat__label">Testimonials</div><a href="{{ route('admin.testimonials') }}">Manage →</a></div>
+    <div class="stat"><div class="stat__num">{{ $stats['blogs'] }}</div><div class="stat__label">Blog posts</div><a href="{{ route('admin.blogs') }}">Manage →</a></div>
     <div class="stat"><div class="stat__num">{{ $stats['navItems'] }}</div><div class="stat__label">Menu items</div><a href="{{ route('admin.nav-items') }}">Manage →</a></div>
     <div class="stat"><div class="stat__num">{{ $stats['messages'] }}</div><div class="stat__label">Messages ({{ $stats['unread'] }} unread)</div><a href="{{ route('admin.messages') }}">View →</a></div>
   </div>

@@ -15,32 +15,32 @@ class SettingsSeeder extends Seeder
             'footer_tagline'    => 'Managed virtual staffing for growing Australian businesses.',
 
             // Marquee (one phrase per line)
-            'marquee_items'     => "NDIS-aware onboarding\nFlat management fee\nLifetime replacement guarantee\nAU business-hours overlap",
+            'marquee_items'     => "Sector-aware onboarding\nOne inclusive hourly rate\nOngoing replacement support\nAustralian-aligned working hours",
 
             // Hero
             'hero_eyebrow'      => 'Managed virtual staffing for Australian businesses',
             'hero_title'        => "Delegate the admin.\nProtect the care.",
-            'hero_subtitle'     => 'Isla places dedicated virtual assistants for NDIS providers, healthcare and allied health practices, and growing Australian businesses — people who understand participant confidentiality and compliance paperwork from day one.',
+            'hero_subtitle'     => 'Isla places dedicated virtual assistants for NDIS providers, healthcare and allied health practices, and growing Australian businesses — supported by structured, sector-aware onboarding and ongoing workforce management.',
             'hero_image'        => 'https://images.unsplash.com/photo-1766066014237-00645c74e9c6?w=1200&q=80&auto=format&fit=crop',
-            'hero_badge_strong' => '20+ hrs',
-            'hero_badge_text'   => 'given back to your team, most weeks',
+            'hero_badge_strong' => 'Dedicated',
+            'hero_badge_text'   => 'to your business during agreed working hours',
             'hero_cta_label'    => 'Book a Discovery Call',
 
             // Section intros
-            'audiences_eyebrow'  => 'Who we work with',
-            'audiences_heading'  => "Built for the work that can't be generic",
-            'audiences_intro'    => 'Most virtual staffing agencies are horizontal generalists. Isla is built around three groups whose paperwork actually carries risk.',
+            'audiences_eyebrow'  => 'Industries',
+            'audiences_heading'  => 'Industries We Support',
+            'audiences_intro'    => 'Dedicated offshore professionals prepared around the systems, standards and pace of your industry.',
 
             'services_eyebrow'   => 'Services',
             'services_heading'   => 'What your assistant can take off your plate',
 
             'process_eyebrow'    => 'How it works',
-            'process_heading'    => 'From discovery call to onboarded, in about two weeks',
-            'process_intro'      => 'A short, structured path — no lengthy procurement process, no ambiguity about what happens next.',
+            'process_heading'    => 'How the partnership works',
+            'process_intro'      => 'A structured path from first conversation to a managed, ongoing engagement — with no ambiguity about what happens next.',
 
             'why_eyebrow'        => 'Why Isla',
             'why_heading'        => 'Straightforward, on purpose',
-            'why_intro'          => 'The staffing industry is full of hidden markups and vague replacement policies. We built Isla around the opposite.',
+            'why_intro'          => 'The staffing industry is full of hidden markups and vague replacement policies. We built Isla around managed staffing through one inclusive hourly rate.',
             'why_image'          => 'https://images.unsplash.com/photo-1762955911431-4c44c7c3f408?w=1000&q=80&auto=format&fit=crop',
 
             'pricing_eyebrow'    => 'Pricing',
@@ -55,8 +55,8 @@ class SettingsSeeder extends Seeder
             'contact_heading'    => 'Tell us about your business',
             'contact_intro'      => "Send a few details and we'll come back with next steps within one business day.",
             'contact_email'      => 'hello@isla.com.au',
-            'contact_phone'      => '+61 00 0000 0000',
-            'contact_location'   => 'Supporting clients across Australia',
+            'contact_phone'      => '+61 2 4093 0535',
+            'contact_location'   => "Teresa Avenue corner Plaridel Street, Nepo Center, Sto. Rosario, Angeles City 2009, Philippines",
 
             // Trust bar (shared)
             'trust_location'   => 'Location: Across Australia',
@@ -66,26 +66,16 @@ class SettingsSeeder extends Seeder
 
             // About page
             'about_eyebrow'          => 'About Isla',
-            'about_heading'          => "Built by people who've done the admin themselves",
-            'about_intro'            => "Isla started with a simple observation: the businesses that need the most careful admin support were being served by agencies built for generic inboxes. We built something narrower, on purpose.",
+            'about_heading'          => 'Built by people who understand the work behind business growth',
+            'about_intro'            => 'Isla was built from hands-on experience supporting Australian businesses where administration, compliance, workforce coordination, documentation and client communication could not be treated as simple back-office tasks.',
             'about_image'            => 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1000&q=80&auto=format&fit=crop',
             'about_story_eyebrow'    => 'Our story',
-            'about_story_heading'    => 'A managed team, not a marketplace',
-            'about_story_body_1'     => "Isla is a managed virtual staffing partner for Australian businesses, run by a Philippines-based team with an Australian-facing operating model. We're not a marketplace of freelancers and we're not a call-centre with a slick landing page — we place one dedicated assistant with your business, brief them on your sector before they ever touch a live account, and manage the relationship for as long as you need us to.",
-            'about_story_body_2'     => "Every assistant we place works within Australian business hours, is briefed on the compliance and confidentiality standards your sector expects, and comes with Isla's lifetime replacement guarantee — because the fit mattering more than the contract is the whole point.",
-            'about_stats_eyebrow'    => 'At a glance',
-            'about_stats_heading'    => 'What working with Isla actually looks like',
-            'about_stat_1_value'     => '20+ hrs',
-            'about_stat_1_label'     => 'given back to a typical team, most weeks',
-            'about_stat_2_value'     => '1–2 wks',
-            'about_stat_2_label'     => 'from discovery call to onboarded',
-            'about_stat_3_value'     => '4',
-            'about_stat_3_label'     => 'sectors we build dedicated assistants around',
-            'about_stat_4_value'     => 'Lifetime',
-            'about_stat_4_label'     => 'replacement guarantee — no cap on timing',
+            'about_story_heading'    => 'A managed staffing partner, not a freelancer marketplace',
+            'about_story_body_1'     => "We saw capable business owners and leaders spending too much time managing recruitment, onboarding, payroll, systems, follow-ups and everyday operational work. Traditional outsourcing models often provided a candidate but left the client responsible for everything that came afterwards. Isla was created to provide a more accountable solution: capable offshore professionals supported by structured recruitment, onboarding, workforce management and ongoing operational oversight.",
+            'about_story_body_2'     => "With a freelancer marketplace, the service often ends after an introduction. With Isla, that is where the partnership begins. Your dedicated professional works an agreed schedule aligned with your Australian operating hours, while Isla provides the workforce infrastructure behind them — payroll administration, HR support, account management, IT assistance, productivity oversight and performance management. Our purpose is not simply to fill seats: it is to help businesses build dependable capacity and create more room for sustainable growth.",
             'about_values_eyebrow'   => 'What we hold ourselves to',
-            'about_values_heading'   => 'Straightforward, on purpose',
-            'about_values_intro'     => 'The same four commitments show up in every engagement, regardless of sector or size.',
+            'about_values_heading'   => 'What working with Isla gives you',
+            'about_values_intro'     => 'The same commitments show up in every engagement, regardless of sector or size.',
             'about_industries_heading' => 'The industries we build assistants around',
 
             // Team We Build page
@@ -117,7 +107,7 @@ class SettingsSeeder extends Seeder
             'calc_eyebrow'                => 'Cost estimator',
             'calc_heading'                => 'What would a dedicated assistant cost you?',
             'calc_intro'                  => 'Adjust the hours and sector below for an indicative monthly range — no email required. Your discovery call gets you an exact, written quote.',
-            'calc_disclaimer'             => 'Indicative only, based on typical Isla rates and a flat monthly management fee per assistant. Exchange rate and figures are illustrative — your discovery call confirms an exact, written quote for your hours and sector.',
+            'calc_disclaimer'             => 'Indicative only, based on one inclusive hourly rate determined by role, experience level, working hours and service requirements. Exchange rate and figures are illustrative — your discovery call confirms an exact, written quote for your hours and sector.',
             'calc_rate_general_low'       => '10',
             'calc_rate_general_high'      => '13',
             'calc_rate_ndis_low'          => '13',
@@ -126,7 +116,6 @@ class SettingsSeeder extends Seeder
             'calc_rate_healthcare_high'   => '17',
             'calc_rate_construction_low'  => '12',
             'calc_rate_construction_high' => '16',
-            'calc_management_fee'         => '650',
             'calc_local_rate'             => '42',
         ];
 

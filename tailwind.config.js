@@ -61,6 +61,14 @@ export default {
                     from: { transform: 'translateX(0)' },
                     to: { transform: 'translateX(-50%)' },
                 },
+                'marquee-y': {
+                    from: { transform: 'translateY(0)' },
+                    to: { transform: 'translateY(-50%)' },
+                },
+                'marquee-y-reverse': {
+                    from: { transform: 'translateY(-50%)' },
+                    to: { transform: 'translateY(0)' },
+                },
                 'spin-slow': {
                     from: { transform: 'rotate(0deg)' },
                     to: { transform: 'rotate(360deg)' },
@@ -72,6 +80,8 @@ export default {
             },
             animation: {
                 marquee: 'marquee 28s linear infinite',
+                'marquee-y': 'marquee-y 36s linear infinite',
+                'marquee-y-reverse': 'marquee-y-reverse 36s linear infinite',
                 'spin-slow': 'spin-slow 8s linear infinite',
                 'orb-pulse': 'orb-pulse 3.2s ease-in-out infinite',
             },

@@ -5,13 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Audience;
 use App\Models\Benefit;
+use App\Models\Blog;
 use App\Models\ContactMessage;
 use App\Models\Faq;
+use App\Models\JobApplication;
 use App\Models\NavItem;
 use App\Models\PricingPlan;
 use App\Models\ProcessStep;
 use App\Models\Service;
 use App\Models\Setting;
+use App\Models\Testimonial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -29,9 +32,13 @@ class AdminController extends Controller
             'processSteps'  => ProcessStep::count(),
             'benefits'      => Benefit::count(),
             'faqs'          => Faq::count(),
+            'testimonials'  => Testimonial::count(),
+            'blogs'         => Blog::count(),
             'navItems'      => NavItem::count(),
             'messages'      => ContactMessage::count(),
             'unread'        => ContactMessage::where('is_read', false)->count(),
+            'applications'  => JobApplication::count(),
+            'newApplications' => JobApplication::where('is_read', false)->count(),
         ];
 
         $recentMessages = ContactMessage::latest()->take(5)->get();
@@ -417,6 +424,118 @@ class AdminController extends Controller
     }
 
     /* =========================================================
+     |  TESTIMONIALS
+     | ========================================================= */
+    public function testimonials()
+    {
+        $testimonials = Testimonial::orderBy('sort_order')->get();
+        return view('admin.testimonials.index', compact('testimonials'));
+    }
+
+    public function createTestimonial()
+    {
+        return view('admin.testimonials.create');
+    }
+
+    public function storeTestimonial(Request $request)
+    {
+        $data = $this->validateTestimonial($request);
+        $data['is_active'] = $request->boolean('is_active');
+        Testimonial::create($data);
+
+        return redirect()->route('admin.testimonials')->with('success', 'Testimonial created.');
+    }
+
+    public function editTestimonial(Testimonial $testimonial)
+    {
+        return view('admin.testimonials.edit', compact('testimonial'));
+    }
+
+    public function updateTestimonial(Request $request, Testimonial $testimonial)
+    {
+        $data = $this->validateTestimonial($request);
+        $data['is_active'] = $request->boolean('is_active');
+        $testimonial->update($data);
+
+        return redirect()->route('admin.testimonials')->with('success', 'Testimonial updated.');
+    }
+
+    public function destroyTestimonial(Testimonial $testimonial)
+    {
+        $testimonial->delete();
+        return back()->with('success', 'Testimonial deleted.');
+    }
+
+    private function validateTestimonial(Request $request): array
+    {
+        return $request->validate([
+            'author'     => 'required|string|max:255',
+            'role'       => 'nullable|string|max:255',
+            'quote'      => 'required|string',
+            'sort_order' => 'nullable|integer',
+        ]);
+    }
+
+    /* =========================================================
+     |  BLOG
+     | ========================================================= */
+    public function blogs()
+    {
+        $blogs = Blog::orderByDesc('published_at')->orderBy('sort_order')->get();
+        return view('admin.blogs.index', compact('blogs'));
+    }
+
+    public function createBlog()
+    {
+        return view('admin.blogs.create');
+    }
+
+    public function storeBlog(Request $request)
+    {
+        $data = $this->validateBlog($request);
+        $data['slug']      = $request->filled('slug') ? Str::slug($request->slug) : $this->uniqueSlug(Blog::class, $data['title']);
+        $data['is_active'] = $request->boolean('is_active');
+        Blog::create($data);
+
+        return redirect()->route('admin.blogs')->with('success', 'Blog post created.');
+    }
+
+    public function editBlog(Blog $blog)
+    {
+        return view('admin.blogs.edit', compact('blog'));
+    }
+
+    public function updateBlog(Request $request, Blog $blog)
+    {
+        $data = $this->validateBlog($request);
+        $data['slug']      = $request->filled('slug') ? $this->uniqueSlug(Blog::class, $request->slug, $blog->id) : $blog->slug;
+        $data['is_active'] = $request->boolean('is_active');
+        $blog->update($data);
+
+        return redirect()->route('admin.blogs')->with('success', 'Blog post updated.');
+    }
+
+    public function destroyBlog(Blog $blog)
+    {
+        $blog->delete();
+        return back()->with('success', 'Blog post deleted.');
+    }
+
+    private function validateBlog(Request $request): array
+    {
+        return $request->validate([
+            'title'        => 'required|string|max:255',
+            'slug'         => 'nullable|string|max:255',
+            'cover_image'  => 'nullable|string|max:2048',
+            'author'       => 'nullable|string|max:255',
+            'excerpt'      => 'nullable|string|max:1000',
+            'body'         => 'nullable|string',
+            'published_at' => 'nullable|date',
+            'sort_order'   => 'nullable|integer',
+        ]);
+    }
+
+    /* =========================================================
      |  NAV ITEMS (dynamic navigation)
      | ========================================================= */
     public function navItems()
@@ -510,5 +629,29 @@ class AdminController extends Controller
     {
         $message->delete();
         return redirect()->route('admin.messages')->with('success', 'Message deleted.');
+    }
+
+    /* =========================================================
+     |  CAREER APPLICATIONS
+     | ========================================================= */
+    public function applications()
+    {
+        $applications = JobApplication::latest()->paginate(15);
+        return view('admin.applications.index', compact('applications'));
+    }
+
+    public function showApplication(JobApplication $application)
+    {
+        if (! $application->is_read) {
+            $application->update(['is_read' => true]);
+        }
+
+        return view('admin.applications.show', compact('application'));
+    }
+
+    public function destroyApplication(JobApplication $application)
+    {
+        $application->delete();
+        return redirect()->route('admin.applications')->with('success', 'Application deleted.');
     }
 }

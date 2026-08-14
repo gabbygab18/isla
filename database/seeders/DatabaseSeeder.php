@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             SettingsSeeder::class,
             NavItemSeeder::class,
             IslaSeeder::class,
+            BlogSeeder::class,
         ]);
     }
 }

@@ -4,16 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title inertia>{{ setting('brand_word', 'Isla') }} — Managed Virtual Staffing for Growing Australian Businesses
-    </title>
-    <meta name="description"
-        content="Isla places dedicated virtual assistants for NDIS providers, healthcare and allied health practices, and growing Australian businesses. Flat management fee, lifetime replacement guarantee.">
+
+    {{-- Google Search Console ownership verification.
+         Keep permanently — removing it un-verifies the property. --}}
+    <meta name="google-site-verification" content="WddVXjae_q2Ax214dYSSBSM23UhKwiXP8ULgjp3Pvoo">
+
+    {{-- Title, description, canonical, Open Graph and JSON-LD.
+         Server-rendered so non-JS crawlers (Facebook, LinkedIn, Slack)
+         see real metadata. Edit copy in app/Support/Seo.php or override
+         per page from admin Settings. --}}
+    @include('partials.seo')
+
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('icon-192.png') }}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('favicon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
 
     {{-- Satoshi (Fontshare) — display / headings --}}
     <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900,1&display=swap" rel="stylesheet">
 
     {{-- Geist + Geist Mono (Google Fonts) — body / UI / captions --}}

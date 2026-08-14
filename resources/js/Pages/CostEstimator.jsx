@@ -20,7 +20,6 @@ const CURRENCY = {
     AUD: { sym: 'A$', fx: 1.0, label: 'Australian Dollar (AUD)' },
     USD: { sym: 'US$', fx: 0.66, label: 'US Dollar (USD)' },
     NZD: { sym: 'NZ$', fx: 1.08, label: 'New Zealand Dollar (NZD)' },
-    GBP: { sym: '£', fx: 0.52, label: 'British Pound (GBP)' },
 };
 const HOURS_WEEK = 38;
 const WEEKS_MONTH = 4.33;
@@ -47,7 +46,7 @@ function makeCalc(services, calc) {
     return function costsFor(catIdx, exp, setup, view = 'monthly', qty = 1) {
         const hIsla = islaHourly(catIdx, exp, setup);
         const hLocal = localHourly(exp);
-        const mIsla = hIsla * HOURS_WEEK * WEEKS_MONTH + calc.managementFee;
+        const mIsla = hIsla * HOURS_WEEK * WEEKS_MONTH; // one inclusive hourly rate — no separate fee
         const mLocal = hLocal * HOURS_WEEK * WEEKS_MONTH * 1.25; // + super/leave/overheads
         if (view === 'hourly') return { isla: (mIsla / (HOURS_WEEK * WEEKS_MONTH)) * qty, local: hLocal * 1.25 * qty, hIsla };
         if (view === 'annual') return { isla: mIsla * 12 * qty, local: mLocal * 12 * qty, hIsla };
@@ -79,8 +78,7 @@ function CompareResult({ cur, result, per, brand, disclaimer, breakdown }) {
             <div className="mt-5 inline-flex items-center gap-2.5 rounded-pill bg-sage-soft px-5 py-3 text-[14.5px] font-semibold text-sage-deep">
                 <Check className="h-4 w-4" strokeWidth={2.6} />
                 <span>
-                    You could save <strong>{money(cur.sym, (result.local - result.isla) * cur.fx)}</strong>{' '}
-                    ({result.local > 0 ? Math.max(0, Math.round(((result.local - result.isla) / result.local) * 100)) : 0}%) {per}
+                    Indicative difference of <strong>{money(cur.sym, (result.local - result.isla) * cur.fx)}</strong> {per} vs a typical local hire
                 </span>
             </div>
 
@@ -105,12 +103,12 @@ function CompareResult({ cur, result, per, brand, disclaimer, breakdown }) {
 
 const emptyRow = () => ({ cat: '', role: '', exp: 'intermediate', setup: 'home', qty: 1 });
 
-export default function CostEstimator({ pricingPlans = [], services = [], calc = { managementFee: 650, localRate: 42 } }) {
+export default function CostEstimator({ pricingPlans = [], services = [], calc = { localRate: 42 } }) {
     const setting = makeSetting(usePage().props?.settings);
     const brand = setting('brand_word', 'Isla');
     const disclaimer = setting(
         'calc_disclaimer',
-        'Indicative only, based on typical Isla rates, a flat monthly management fee per assistant, and illustrative exchange rates and local salary benchmarks. Your discovery call confirms an exact, written quote for your role and sector.',
+        'Indicative only, based on one inclusive hourly rate determined by role, experience level, working hours and service requirements, with illustrative exchange rates and local salary benchmarks. Your discovery call confirms an exact, written quote for your role and sector.',
     );
 
     const costsFor = useMemo(() => makeCalc(services, calc), [services, calc]);
@@ -254,9 +252,9 @@ export default function CostEstimator({ pricingPlans = [], services = [], calc =
                                             disclaimer={disclaimer}
                                             breakdown={[
                                                 ['Role', `${sRole} · ${EXPERIENCE.find((e) => e.value === sExp)?.label} · ${SETUPS.find((s) => s.value === sSetup)?.label}`],
-                                                ['Assistant rate', `${money(sCur.sym, sResult.hIsla * sCur.fx)} / hr`],
-                                                ['Flat management fee', `${money(sCur.sym, calc.managementFee * sCur.fx)} / month`],
-                                                ['Basis', '38 hrs / week, AU business hours'],
+                                                ['Inclusive hourly rate', `${money(sCur.sym, sResult.hIsla * sCur.fx)} / hr`],
+                                                ['Basis', '38 hrs / week, Australian-aligned schedule'],
+                                                ['Includes', 'Recruitment, onboarding, payroll, HR, account management, equipment & IT'],
                                             ]}
                                         />
                                     )}

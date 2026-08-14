@@ -13,7 +13,7 @@ export default function AudienceShow({ audience, related = [] }) {
     return (
         <SiteLayout title={audience.title} description={audience.summary}>
             <PageHero
-                crumbs={[{ label: 'Who We Work With', href: '/who-we-work-with' }, { label: audience.title }]}
+                crumbs={[{ label: 'Industries', href: '/who-we-work-with' }, { label: audience.title }]}
                 eyebrow="Who we work with"
                 eyebrowColor="text-sage-deep"
                 heading={audience.title}
@@ -69,14 +69,14 @@ export default function AudienceShow({ audience, related = [] }) {
                     >
                         <h3 className="t-card-title">Hand this off</h3>
                         <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
-                            Tell us what's eating your hours and we'll match an assistant who understands your sector.
+                            See the roles and teams we can build around your industry, or book a discovery call to talk it through.
                         </p>
                         <div className="mt-6 flex flex-col gap-3">
                             <StaggerButton href="/book-a-call" icon={CalendarHeart} className="w-full">
                                 Book a Discovery Call
                             </StaggerButton>
-                            <StaggerButton href="/contact" variant="secondary" className="w-full">
-                                Request a VA
+                            <StaggerButton href="/team-we-build" variant="secondary" className="w-full">
+                                Explore the Team We Build
                             </StaggerButton>
                         </div>
                     </motion.aside>
@@ -86,7 +86,7 @@ export default function AudienceShow({ audience, related = [] }) {
             {related.length > 0 && (
                 <section className="section pt-0">
                     <div className="container-site">
-                        <p className="t-eyebrow mb-3 text-sage-deep">More sectors</p>
+                        <p className="t-eyebrow mb-3 text-sage-deep">More industries</p>
                         <h2 className="t-headline mb-8">Also built for</h2>
                         {/* scrollxui: slider — related rail */}
                         <Slider>

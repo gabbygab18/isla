@@ -43,8 +43,8 @@
       <div class="inc-strip reveal">
         <p class="t-caption" style="color:var(--sage-deep);">Included in every plan</p>
         <ul class="inc-strip__list">
-          <li><svg class="icon"><use href="#i-check"/></svg> One flat management fee</li>
-          <li><svg class="icon"><use href="#i-check"/></svg> Lifetime replacement guarantee</li>
+          <li><svg class="icon"><use href="#i-check"/></svg> One inclusive hourly rate</li>
+          <li><svg class="icon"><use href="#i-check"/></svg> Ongoing replacement and continuity support</li>
           <li><svg class="icon"><use href="#i-check"/></svg> Named point of contact</li>
           <li><svg class="icon"><use href="#i-check"/></svg> AU business-hours overlap</li>
         </ul>

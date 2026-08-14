@@ -17,6 +17,9 @@ class NavItemSeeder extends Seeder
             ['label' => 'Cost Estimator',    'url' => '/cost-estimator'],
             ['label' => 'Pricing',           'url' => '/pricing'],
             ['label' => 'FAQ',               'url' => '/faq'],
+            ['label' => 'Testimonials',      'url' => '/testimonials'],
+            ['label' => 'Blog',              'url' => '/blog'],
+            ['label' => 'Careers',           'url' => '/careers'],
             ['label' => 'Contact',           'url' => '/contact'],
         ];
 
