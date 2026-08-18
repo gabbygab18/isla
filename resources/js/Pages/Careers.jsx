@@ -71,8 +71,13 @@ function ApplicationForm({ roles, selectedRole, onRoleChange, formRef }) {
         role: selectedRole || '',
         availability: '',
         portfolio_url: '',
+        resume: null,
         message: '',
     });
+
+    const [resumeName, setResumeName] = useState('');
+    const RESUME_TYPES = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const MAX_RESUME_BYTES = 5 * 1024 * 1024;
 
     // keep the form's role in sync when a card's "Apply" button is clicked
     useEffect(() => {
@@ -97,6 +102,10 @@ function ApplicationForm({ roles, selectedRole, onRoleChange, formRef }) {
         if (!form.data.role) next.role = 'Please choose the role you\'re applying for.';
         if (form.data.portfolio_url.trim() && !URL_RE.test(form.data.portfolio_url.trim()))
             next.portfolio_url = 'Enter a full link starting with https://';
+        if (form.data.resume) {
+            if (!RESUME_TYPES.includes(form.data.resume.type)) next.resume = 'Upload a PDF, DOC or DOCX file.';
+            else if (form.data.resume.size > MAX_RESUME_BYTES) next.resume = 'File needs to be under 5MB.';
+        }
         if (!form.data.message.trim()) next.message = 'Tell us a little about yourself.';
         else if (form.data.message.trim().length < 20) next.message = 'Please write at least a sentence or two (20+ characters).';
         setClientErrors(next);
@@ -115,6 +124,7 @@ function ApplicationForm({ roles, selectedRole, onRoleChange, formRef }) {
             onSuccess: () => {
                 form.reset();
                 setClientErrors({});
+                setResumeName('');
                 onRoleChange('');
                 setDone(true);
             },
@@ -222,7 +232,7 @@ function ApplicationForm({ roles, selectedRole, onRoleChange, formRef }) {
                 />
             </Field>
 
-            <Field label="Portfolio, CV or LinkedIn link" htmlFor="portfolio_url" error={errors.portfolio_url}>
+            <Field label="Portfolio or LinkedIn link" htmlFor="portfolio_url" error={errors.portfolio_url}>
                 <input
                     id="portfolio_url"
                     type="url"
@@ -230,6 +240,34 @@ function ApplicationForm({ roles, selectedRole, onRoleChange, formRef }) {
                     className={cn(inputClass, errors.portfolio_url ? 'border-rose-deep' : 'border-hairline focus:border-ink/50')}
                     value={form.data.portfolio_url}
                     onChange={(e) => form.setData('portfolio_url', e.target.value)}
+                />
+            </Field>
+
+            <Field label="Upload your CV / resume" htmlFor="resume" error={errors.resume}>
+                <label
+                    htmlFor="resume"
+                    className={cn(
+                        'flex cursor-pointer items-center justify-between gap-3 rounded-md border border-dashed bg-white px-4 py-3 text-[14.5px] transition-colors',
+                        errors.resume ? 'border-rose-deep' : 'border-hairline hover:border-ink/40',
+                    )}
+                >
+                    <span className={resumeName ? 'font-medium text-ink' : 'text-ink-soft/70'}>
+                        {resumeName || 'Choose a PDF, DOC or DOCX (max 5MB)'}
+                    </span>
+                    <span className="shrink-0 rounded-pill bg-cream px-3 py-1.5 text-[12.5px] font-semibold text-ink-soft">
+                        Browse
+                    </span>
+                </label>
+                <input
+                    id="resume"
+                    type="file"
+                    accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    className="sr-only"
+                    onChange={(e) => {
+                        const file = e.target.files?.[0] ?? null;
+                        form.setData('resume', file);
+                        setResumeName(file?.name || '');
+                    }}
                 />
             </Field>
 

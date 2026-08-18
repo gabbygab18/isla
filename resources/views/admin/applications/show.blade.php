@@ -17,7 +17,10 @@
         <div><label class="muted" style="font-family:var(--mono); font-size:11px; text-transform:uppercase;">Phone</label><p style="margin:4px 0 0;">{{ $application->phone }}</p></div>
       </div>
       @if ($application->portfolio_url)
-        <div><label class="muted" style="font-family:var(--mono); font-size:11px; text-transform:uppercase;">Portfolio / CV link</label><p style="margin:4px 0 0;"><a href="{{ $application->portfolio_url }}" target="_blank" rel="noopener" style="color:var(--rose-deep); font-weight:600;">{{ $application->portfolio_url }}</a></p></div>
+        <div><label class="muted" style="font-family:var(--mono); font-size:11px; text-transform:uppercase;">Portfolio / LinkedIn link</label><p style="margin:4px 0 0;"><a href="{{ $application->portfolio_url }}" target="_blank" rel="noopener" style="color:var(--rose-deep); font-weight:600;">{{ $application->portfolio_url }}</a></p></div>
+      @endif
+      @if ($application->resume_path)
+        <div><label class="muted" style="font-family:var(--mono); font-size:11px; text-transform:uppercase;">Resume / CV</label><p style="margin:4px 0 0;"><a href="{{ $application->resume_url }}" target="_blank" rel="noopener" class="btn btn-outline btn-sm">Download resume</a></p></div>
       @endif
       <div>
         <label class="muted" style="font-family:var(--mono); font-size:11px; text-transform:uppercase;">About the applicant</label>

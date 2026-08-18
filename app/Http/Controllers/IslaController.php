@@ -196,6 +196,7 @@ class IslaController extends Controller
             'role'          => 'required|string|max:255',
             'availability'  => 'nullable|string|max:255',
             'portfolio_url' => 'nullable|url|max:255',
+            'resume'        => 'nullable|file|mimes:pdf,doc,docx|max:5120',
             'message'       => 'required|string|min:20|max:5000',
         ], [
             'full_name.required' => 'Please tell us your full name.',
@@ -204,9 +205,16 @@ class IslaController extends Controller
             'phone.required'     => 'A contact number is required.',
             'role.required'      => 'Please choose the role you\'re applying for.',
             'portfolio_url.url'  => 'Enter a full link starting with https://',
+            'resume.mimes'       => 'Upload your resume as a PDF, DOC or DOCX file.',
+            'resume.max'         => 'Your resume file needs to be under 5MB.',
             'message.required'   => 'Tell us a little about yourself.',
             'message.min'        => 'Please write at least a sentence or two (20+ characters).',
         ]);
+
+        if ($request->hasFile('resume')) {
+            $validated['resume_path'] = $request->file('resume')->store('resumes', 'public');
+        }
+        unset($validated['resume']);
 
         JobApplication::create($validated);
 

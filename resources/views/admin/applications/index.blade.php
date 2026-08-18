@@ -10,7 +10,7 @@
       <tbody>
         @foreach ($applications as $a)
           <tr>
-            <td><strong>{{ $a->full_name }}</strong> @unless($a->is_read)<span class="pill pill-rose" style="margin-left:6px;">New</span>@endunless<br><span class="muted">{{ $a->phone }}</span></td>
+            <td><strong>{{ $a->full_name }}</strong> @unless($a->is_read)<span class="pill pill-rose" style="margin-left:6px;">New</span>@endunless @if($a->resume_path)<span class="pill" style="background:var(--sage-soft); color:var(--sage-deep); margin-left:6px;">CV</span>@endif<br><span class="muted">{{ $a->phone }}</span></td>
             <td class="muted">{{ $a->role }}</td>
             <td class="muted">{{ $a->email }}</td>
             <td class="muted">{{ $a->created_at->format('d M Y, g:ia') }}</td>
