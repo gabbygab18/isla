@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\StaffProfileController;
 use App\Http\Controllers\IslaController;
 use App\Http\Controllers\LlmsController;
 use App\Http\Controllers\SitemapController;
@@ -126,6 +127,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/blogs/{blog}/edit', [AdminController::class, 'editBlog'])->name('blogs.edit');
         Route::put('/blogs/{blog}', [AdminController::class, 'updateBlog'])->name('blogs.update');
         Route::delete('/blogs/{blog}', [AdminController::class, 'destroyBlog'])->name('blogs.destroy');
+
+        // Staff profiles (talent bench — admin-only, Inertia-rendered to match the frontend's look/motion)
+        Route::get('/staff-profiles', [StaffProfileController::class, 'index'])->name('staff-profiles');
+        Route::get('/staff-profiles/create', [StaffProfileController::class, 'create'])->name('staff-profiles.create');
+        Route::post('/staff-profiles', [StaffProfileController::class, 'store'])->name('staff-profiles.store');
+        Route::get('/staff-profiles/import', [StaffProfileController::class, 'importForm'])->name('staff-profiles.import');
+        Route::get('/staff-profiles/import/template', [StaffProfileController::class, 'template'])->name('staff-profiles.import.template');
+        Route::post('/staff-profiles/import', [StaffProfileController::class, 'import'])->name('staff-profiles.import.store');
+        Route::get('/staff-profiles/{staffProfile}/edit', [StaffProfileController::class, 'edit'])->name('staff-profiles.edit');
+        Route::put('/staff-profiles/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff-profiles.update');
+        Route::delete('/staff-profiles/{staffProfile}', [StaffProfileController::class, 'destroy'])->name('staff-profiles.destroy');
+        Route::get('/staff-profiles/{staffProfile}', [StaffProfileController::class, 'show'])->name('staff-profiles.show');
 
         // Nav items (dynamic navigation)
         Route::get('/nav-items', [AdminController::class, 'navItems'])->name('nav-items');

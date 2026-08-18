@@ -23,6 +23,8 @@ class JobApplication extends Model
         'is_read' => 'boolean',
     ];
 
+    protected $appends = ['resume_url'];
+
     public function getResumeUrlAttribute(): ?string
     {
         return $this->resume_path ? Storage::disk('public')->url($this->resume_path) : null;

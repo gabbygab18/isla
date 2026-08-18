@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             NavItemSeeder::class,
             IslaSeeder::class,
             BlogSeeder::class,
+            StaffProfileSeeder::class,
         ]);
     }
 }

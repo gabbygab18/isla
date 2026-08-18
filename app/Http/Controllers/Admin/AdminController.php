@@ -17,6 +17,7 @@ use App\Models\Setting;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class AdminController extends Controller
 {
@@ -43,7 +44,7 @@ class AdminController extends Controller
 
         $recentMessages = ContactMessage::latest()->take(5)->get();
 
-        return view('admin.dashboard', compact('stats', 'recentMessages'));
+        return Inertia::render('Admin/Dashboard', compact('stats', 'recentMessages'));
     }
 
     /* =========================================================
@@ -87,13 +88,14 @@ class AdminController extends Controller
      | ========================================================= */
     public function audiences()
     {
-        $audiences = Audience::orderBy('sort_order')->get();
-        return view('admin.audiences.index', compact('audiences'));
+        return Inertia::render('Admin/Audiences/Index', [
+            'audiences' => Audience::orderBy('sort_order')->get(),
+        ]);
     }
 
     public function createAudience()
     {
-        return view('admin.audiences.create');
+        return Inertia::render('Admin/Audiences/Form', ['audience' => null]);
     }
 
     public function storeAudience(Request $request)
@@ -109,7 +111,7 @@ class AdminController extends Controller
 
     public function editAudience(Audience $audience)
     {
-        return view('admin.audiences.edit', compact('audience'));
+        return Inertia::render('Admin/Audiences/Form', compact('audience'));
     }
 
     public function updateAudience(Request $request, Audience $audience)
@@ -146,13 +148,14 @@ class AdminController extends Controller
      | ========================================================= */
     public function services()
     {
-        $services = Service::orderBy('sort_order')->get();
-        return view('admin.services.index', compact('services'));
+        return Inertia::render('Admin/Services/Index', [
+            'services' => Service::orderBy('sort_order')->get(),
+        ]);
     }
 
     public function createService()
     {
-        return view('admin.services.create');
+        return Inertia::render('Admin/Services/Form', ['service' => null]);
     }
 
     public function storeService(Request $request)
@@ -168,7 +171,7 @@ class AdminController extends Controller
 
     public function editService(Service $service)
     {
-        return view('admin.services.edit', compact('service'));
+        return Inertia::render('Admin/Services/Form', compact('service'));
     }
 
     public function updateService(Request $request, Service $service)
@@ -205,13 +208,14 @@ class AdminController extends Controller
      | ========================================================= */
     public function pricingPlans()
     {
-        $plans = PricingPlan::orderBy('sort_order')->get();
-        return view('admin.pricing.index', compact('plans'));
+        return Inertia::render('Admin/Pricing/Index', [
+            'plans' => PricingPlan::orderBy('sort_order')->get(),
+        ]);
     }
 
     public function createPlan()
     {
-        return view('admin.pricing.create');
+        return Inertia::render('Admin/Pricing/Form', ['plan' => null]);
     }
 
     public function storePlan(Request $request)
@@ -228,7 +232,7 @@ class AdminController extends Controller
 
     public function editPlan(PricingPlan $plan)
     {
-        return view('admin.pricing.edit', compact('plan'));
+        return Inertia::render('Admin/Pricing/Form', compact('plan'));
     }
 
     public function updatePlan(Request $request, PricingPlan $plan)
@@ -268,13 +272,14 @@ class AdminController extends Controller
      | ========================================================= */
     public function processSteps()
     {
-        $steps = ProcessStep::orderBy('sort_order')->get();
-        return view('admin.process.index', compact('steps'));
+        return Inertia::render('Admin/ProcessSteps/Index', [
+            'steps' => ProcessStep::orderBy('sort_order')->get(),
+        ]);
     }
 
     public function createStep()
     {
-        return view('admin.process.create');
+        return Inertia::render('Admin/ProcessSteps/Form', ['step' => null]);
     }
 
     public function storeStep(Request $request)
@@ -288,7 +293,7 @@ class AdminController extends Controller
 
     public function editStep(ProcessStep $step)
     {
-        return view('admin.process.edit', compact('step'));
+        return Inertia::render('Admin/ProcessSteps/Form', compact('step'));
     }
 
     public function updateStep(Request $request, ProcessStep $step)
@@ -321,13 +326,14 @@ class AdminController extends Controller
      | ========================================================= */
     public function benefits()
     {
-        $benefits = Benefit::orderBy('sort_order')->get();
-        return view('admin.benefits.index', compact('benefits'));
+        return Inertia::render('Admin/Benefits/Index', [
+            'benefits' => Benefit::orderBy('sort_order')->get(),
+        ]);
     }
 
     public function createBenefit()
     {
-        return view('admin.benefits.create');
+        return Inertia::render('Admin/Benefits/Form', ['benefit' => null]);
     }
 
     public function storeBenefit(Request $request)
@@ -341,7 +347,7 @@ class AdminController extends Controller
 
     public function editBenefit(Benefit $benefit)
     {
-        return view('admin.benefits.edit', compact('benefit'));
+        return Inertia::render('Admin/Benefits/Form', compact('benefit'));
     }
 
     public function updateBenefit(Request $request, Benefit $benefit)
@@ -373,13 +379,14 @@ class AdminController extends Controller
      | ========================================================= */
     public function faqs()
     {
-        $faqs = Faq::orderBy('sort_order')->get();
-        return view('admin.faqs.index', compact('faqs'));
+        return Inertia::render('Admin/Faqs/Index', [
+            'faqs' => Faq::orderBy('sort_order')->get(),
+        ]);
     }
 
     public function createFaq()
     {
-        return view('admin.faqs.create');
+        return Inertia::render('Admin/Faqs/Form', ['faq' => null]);
     }
 
     public function storeFaq(Request $request)
@@ -394,7 +401,7 @@ class AdminController extends Controller
 
     public function editFaq(Faq $faq)
     {
-        return view('admin.faqs.edit', compact('faq'));
+        return Inertia::render('Admin/Faqs/Form', compact('faq'));
     }
 
     public function updateFaq(Request $request, Faq $faq)
@@ -428,13 +435,14 @@ class AdminController extends Controller
      | ========================================================= */
     public function testimonials()
     {
-        $testimonials = Testimonial::orderBy('sort_order')->get();
-        return view('admin.testimonials.index', compact('testimonials'));
+        return Inertia::render('Admin/Testimonials/Index', [
+            'testimonials' => Testimonial::orderBy('sort_order')->get(),
+        ]);
     }
 
     public function createTestimonial()
     {
-        return view('admin.testimonials.create');
+        return Inertia::render('Admin/Testimonials/Form', ['testimonial' => null]);
     }
 
     public function storeTestimonial(Request $request)
@@ -448,7 +456,7 @@ class AdminController extends Controller
 
     public function editTestimonial(Testimonial $testimonial)
     {
-        return view('admin.testimonials.edit', compact('testimonial'));
+        return Inertia::render('Admin/Testimonials/Form', compact('testimonial'));
     }
 
     public function updateTestimonial(Request $request, Testimonial $testimonial)
@@ -481,13 +489,14 @@ class AdminController extends Controller
      | ========================================================= */
     public function blogs()
     {
-        $blogs = Blog::orderByDesc('published_at')->orderBy('sort_order')->get();
-        return view('admin.blogs.index', compact('blogs'));
+        return Inertia::render('Admin/Blogs/Index', [
+            'blogs' => Blog::orderByDesc('published_at')->orderBy('sort_order')->get(),
+        ]);
     }
 
     public function createBlog()
     {
-        return view('admin.blogs.create');
+        return Inertia::render('Admin/Blogs/Form', ['blog' => null]);
     }
 
     public function storeBlog(Request $request)
@@ -502,7 +511,7 @@ class AdminController extends Controller
 
     public function editBlog(Blog $blog)
     {
-        return view('admin.blogs.edit', compact('blog'));
+        return Inertia::render('Admin/Blogs/Form', compact('blog'));
     }
 
     public function updateBlog(Request $request, Blog $blog)
@@ -540,13 +549,14 @@ class AdminController extends Controller
      | ========================================================= */
     public function navItems()
     {
-        $navItems = NavItem::orderBy('sort_order')->get();
-        return view('admin.nav.index', compact('navItems'));
+        return Inertia::render('Admin/NavItems/Index', [
+            'navItems' => NavItem::orderBy('sort_order')->get(),
+        ]);
     }
 
     public function createNavItem()
     {
-        return view('admin.nav.create');
+        return Inertia::render('Admin/NavItems/Form', ['navItem' => null]);
     }
 
     public function storeNavItem(Request $request)
@@ -560,7 +570,7 @@ class AdminController extends Controller
 
     public function editNavItem(NavItem $navItem)
     {
-        return view('admin.nav.edit', compact('navItem'));
+        return Inertia::render('Admin/NavItems/Form', compact('navItem'));
     }
 
     public function updateNavItem(Request $request, NavItem $navItem)
@@ -592,8 +602,156 @@ class AdminController extends Controller
      | ========================================================= */
     public function settings()
     {
-        $settings = Setting::getAll();
-        return view('admin.settings', compact('settings'));
+        return Inertia::render('Admin/Settings/Index', [
+            'groups'   => $this->settingsGroups(),
+            'settings' => Setting::getAll(),
+        ]);
+    }
+
+    /**
+     * key => [label, type]  (type: text | textarea), grouped for display.
+     * Ported verbatim from the old admin.settings Blade view.
+     */
+    private function settingsGroups(): array
+    {
+        return [
+            'SEO — search and social' => [
+                'og_image'                  => ['Share image URL (1200x630)', 'text'],
+                'social_linkedin'           => ['LinkedIn profile URL', 'text'],
+                'social_facebook'           => ['Facebook page URL', 'text'],
+                'social_instagram'          => ['Instagram profile URL', 'text'],
+                'seo_home_title'            => ['Home — search title', 'text'],
+                'seo_home_description'      => ['Home — search description', 'textarea'],
+                'seo_about_title'           => ['About — search title', 'text'],
+                'seo_about_description'     => ['About — search description', 'textarea'],
+                'seo_services_title'        => ['Services — search title', 'text'],
+                'seo_services_description'  => ['Services — search description', 'textarea'],
+                'seo_audiences_title'       => ['Industries — search title', 'text'],
+                'seo_audiences_description' => ['Industries — search description', 'textarea'],
+                'seo_pricing_title'         => ['Pricing — search title', 'text'],
+                'seo_pricing_description'   => ['Pricing — search description', 'textarea'],
+                'seo_faq_title'             => ['FAQ — search title', 'text'],
+                'seo_faq_description'       => ['FAQ — search description', 'textarea'],
+                'seo_contact_title'         => ['Contact — search title', 'text'],
+                'seo_contact_description'   => ['Contact — search description', 'textarea'],
+            ],
+            'Brand' => [
+                'brand_word'     => ['Brand word', 'text'],
+                'footer_tagline' => ['Footer tagline', 'text'],
+                'home_title'     => ['Homepage browser/search title', 'text'],
+                'marquee_items'  => ['Marquee phrases (one per line)', 'textarea'],
+            ],
+            'Hero' => [
+                'hero_eyebrow'      => ['Eyebrow', 'text'],
+                'hero_title'        => ['Title (line breaks allowed)', 'textarea'],
+                'hero_subtitle'     => ['Subtitle', 'textarea'],
+                'hero_image'        => ['Image URL', 'text'],
+                'hero_badge_strong' => ['Badge — bold text', 'text'],
+                'hero_badge_text'   => ['Badge — small text', 'text'],
+                'hero_cta_label'    => ['Primary CTA label', 'text'],
+            ],
+            'Who we work with' => [
+                'audiences_eyebrow' => ['Eyebrow', 'text'],
+                'audiences_heading' => ['Heading', 'text'],
+                'audiences_intro'   => ['Intro', 'textarea'],
+            ],
+            'Services' => [
+                'services_eyebrow' => ['Eyebrow', 'text'],
+                'services_heading' => ['Heading', 'text'],
+            ],
+            'How it works' => [
+                'process_eyebrow' => ['Eyebrow', 'text'],
+                'process_heading' => ['Heading', 'text'],
+                'process_intro'   => ['Intro', 'textarea'],
+            ],
+            'Why Isla' => [
+                'why_eyebrow' => ['Eyebrow', 'text'],
+                'why_heading' => ['Heading', 'text'],
+                'why_intro'   => ['Intro', 'textarea'],
+                'why_image'   => ['Image URL', 'text'],
+            ],
+            'Pricing' => [
+                'pricing_eyebrow' => ['Eyebrow', 'text'],
+                'pricing_heading' => ['Heading', 'text'],
+                'pricing_intro'   => ['Intro', 'textarea'],
+            ],
+            'FAQ' => [
+                'faq_eyebrow' => ['Eyebrow', 'text'],
+                'faq_heading' => ['Heading', 'text'],
+            ],
+            'Contact' => [
+                'contact_eyebrow'  => ['Eyebrow', 'text'],
+                'contact_heading'  => ['Heading', 'text'],
+                'contact_intro'    => ['Intro', 'textarea'],
+                'contact_email'    => ['Email', 'text'],
+                'contact_phone'    => ['Phone', 'text'],
+                'contact_location' => ['Location line', 'text'],
+            ],
+            'Trust bar (shared strip)' => [
+                'trust_location'   => ['Item 1 — location', 'text'],
+                'trust_response'   => ['Item 2 — response time', 'text'],
+                'trust_industries' => ['Item 3 — industries', 'text'],
+                'trust_managed'    => ['Item 4 — managed line', 'text'],
+            ],
+            'About page' => [
+                'about_eyebrow'            => ['Hero eyebrow', 'text'],
+                'about_heading'            => ['Hero heading', 'text'],
+                'about_intro'              => ['Hero intro', 'textarea'],
+                'about_image'              => ['Story image URL', 'text'],
+                'about_story_eyebrow'      => ['Story eyebrow', 'text'],
+                'about_story_heading'      => ['Story heading', 'text'],
+                'about_story_body_1'       => ['Story paragraph 1', 'textarea'],
+                'about_story_body_2'       => ['Story paragraph 2', 'textarea'],
+                'about_values_eyebrow'     => ['Values eyebrow', 'text'],
+                'about_values_heading'     => ['Values heading', 'text'],
+                'about_values_intro'       => ['Values intro', 'textarea'],
+                'about_industries_heading' => ['Industries section heading', 'text'],
+                'ph_eyebrow'               => ['About the Philippines — eyebrow', 'text'],
+                'ph_heading'               => ['About the Philippines — heading', 'text'],
+                'ph_intro'                 => ['About the Philippines — intro', 'textarea'],
+            ],
+            'Team We Build page' => [
+                'team_eyebrow'              => ['Hero eyebrow', 'text'],
+                'team_heading'              => ['Hero heading', 'text'],
+                'team_intro'                => ['Hero intro', 'textarea'],
+                'team_construction_title'   => ['Construction card — title', 'text'],
+                'team_construction_summary' => ['Construction card — summary', 'textarea'],
+                'team_process_eyebrow'      => ['Process eyebrow', 'text'],
+                'team_process_heading'      => ['Process heading', 'text'],
+                'team_process_intro'        => ['Process intro', 'textarea'],
+            ],
+            'Book a Discovery Call page' => [
+                'book_window_days'     => ['Calendar — days of availability shown (e.g. 14)', 'text'],
+                'book_eyebrow'         => ['Hero eyebrow', 'text'],
+                'book_heading'         => ['Hero heading', 'text'],
+                'book_intro'           => ['Hero intro', 'textarea'],
+                'book_form_eyebrow'    => ['Form eyebrow', 'text'],
+                'book_form_heading'    => ['Form heading', 'text'],
+                'book_form_intro'      => ['Form intro', 'textarea'],
+                'book_next_eyebrow'    => ['What happens next — eyebrow', 'text'],
+                'book_next_heading'    => ['What happens next — heading', 'text'],
+                'book_lighter_eyebrow' => ['Lighter options — eyebrow', 'text'],
+                'book_lighter_heading' => ['Lighter options — heading', 'text'],
+                'book_lighter_intro'   => ['Lighter options — intro', 'textarea'],
+                'book_faq_eyebrow'     => ['Call FAQ eyebrow', 'text'],
+                'book_faq_heading'     => ['Call FAQ heading', 'text'],
+            ],
+            'Cost estimator page' => [
+                'calc_eyebrow'                => ['Hero eyebrow', 'text'],
+                'calc_heading'                => ['Hero heading', 'text'],
+                'calc_intro'                  => ['Hero intro', 'textarea'],
+                'calc_disclaimer'             => ['Disclaimer text', 'textarea'],
+                'calc_rate_general_low'       => ['General rate — low (A$/hr)', 'text'],
+                'calc_rate_general_high'      => ['General rate — high (A$/hr)', 'text'],
+                'calc_rate_ndis_low'          => ['NDIS rate — low (A$/hr)', 'text'],
+                'calc_rate_ndis_high'         => ['NDIS rate — high (A$/hr)', 'text'],
+                'calc_rate_healthcare_low'    => ['Healthcare rate — low (A$/hr)', 'text'],
+                'calc_rate_healthcare_high'   => ['Healthcare rate — high (A$/hr)', 'text'],
+                'calc_rate_construction_low'  => ['Construction rate — low (A$/hr)', 'text'],
+                'calc_rate_construction_high' => ['Construction rate — high (A$/hr)', 'text'],
+                'calc_local_rate'             => ['Local hire equivalent (A$/hr)', 'text'],
+            ],
+        ];
     }
 
     public function updateSettings(Request $request)
@@ -612,8 +770,9 @@ class AdminController extends Controller
      | ========================================================= */
     public function messages()
     {
-        $messages = ContactMessage::latest()->paginate(15);
-        return view('admin.messages.index', compact('messages'));
+        return Inertia::render('Admin/Messages/Index', [
+            'messages' => ContactMessage::latest()->paginate(15),
+        ]);
     }
 
     public function showMessage(ContactMessage $message)
@@ -622,7 +781,7 @@ class AdminController extends Controller
             $message->update(['is_read' => true]);
         }
 
-        return view('admin.messages.show', compact('message'));
+        return Inertia::render('Admin/Messages/Show', compact('message'));
     }
 
     public function destroyMessage(ContactMessage $message)
@@ -636,8 +795,9 @@ class AdminController extends Controller
      | ========================================================= */
     public function applications()
     {
-        $applications = JobApplication::latest()->paginate(15);
-        return view('admin.applications.index', compact('applications'));
+        return Inertia::render('Admin/Applications/Index', [
+            'applications' => JobApplication::latest()->paginate(15),
+        ]);
     }
 
     public function showApplication(JobApplication $application)
@@ -646,7 +806,7 @@ class AdminController extends Controller
             $application->update(['is_read' => true]);
         }
 
-        return view('admin.applications.show', compact('application'));
+        return Inertia::render('Admin/Applications/Show', compact('application'));
     }
 
     public function destroyApplication(JobApplication $application)

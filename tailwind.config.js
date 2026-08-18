@@ -33,6 +33,23 @@ export default {
                     soft: 'rgba(43, 39, 35, 0.09)',
                 },
                 'on-inverse-soft': 'rgba(253, 247, 239, 0.14)',
+
+                // ── shadcn/scrollxui semantic tokens, mapped onto the Isla
+                // brand palette above so imported ui/ components (Table,
+                // Pagination, Button, Badge, DropdownMenu…) match the rest
+                // of the site instead of shadcn's default neutral theme.
+                background: '#fdf7ef',
+                foreground: '#2b2723',
+                card: { DEFAULT: '#ffffff', foreground: '#2b2723' },
+                popover: { DEFAULT: '#ffffff', foreground: '#2b2723' },
+                primary: { DEFAULT: '#2b2723', foreground: '#fdf7ef' },
+                secondary: { DEFAULT: '#f2dcdd', foreground: '#c17579' },
+                muted: { DEFAULT: '#f1ece3', foreground: '#6b6259' },
+                accent: { DEFAULT: '#e6e9db', foreground: '#2b2723' },
+                destructive: { DEFAULT: '#b23b3b', foreground: '#ffffff' },
+                border: 'rgba(43, 39, 35, 0.16)',
+                input: 'rgba(43, 39, 35, 0.16)',
+                ring: '#2b2723',
             },
             fontFamily: {
                 // Satoshi → display / headings, Geist → body / UI
