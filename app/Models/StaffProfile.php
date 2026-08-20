@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class StaffProfile extends Model
 {
@@ -10,6 +12,8 @@ class StaffProfile extends Model
         'name',
         'slug',
         'role_title',
+        'talent_role_id',
+        'talent_sub_role_id',
         'category',
         'photo_url',
         'about_me',
@@ -35,6 +39,33 @@ class StaffProfile extends Model
         'affiliations'        => 'array',
         'is_active'           => 'boolean',
     ];
+
+    protected $appends = ['photo_display_url'];
+
+    /**
+     * photo_url holds either a pasted external URL (CSV imports) or a path on
+     * the public disk (admin uploads) — resolve both to something renderable.
+     */
+    public function getPhotoDisplayUrlAttribute(): ?string
+    {
+        if (! $this->photo_url) {
+            return null;
+        }
+
+        return Str::startsWith($this->photo_url, ['http://', 'https://', '/'])
+            ? $this->photo_url
+            : Storage::disk('public')->url($this->photo_url);
+    }
+
+    public function talentRole()
+    {
+        return $this->belongsTo(TalentRole::class, 'talent_role_id');
+    }
+
+    public function talentSubRole()
+    {
+        return $this->belongsTo(TalentSubRole::class, 'talent_sub_role_id');
+    }
 
     public function getRouteKeyName(): string
     {

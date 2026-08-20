@@ -30,6 +30,12 @@ return [
     ],
 
 
+    // Interview requests booked from the talent bench.
+    'talent' => [
+        'to' => array_values(array_filter(array_map('trim', explode(',', (string) env('MAIL_TALENT_TO', 'hello@isla.com.au'))))),
+        'cc' => array_values(array_filter(array_map('trim', explode(',', (string) env('MAIL_TALENT_CC', ''))))),
+    ],
+
     'enquiry' => [
         'to' => array_values(array_filter(array_map('trim', explode(',', (string) env('MAIL_ENQUIRY_TO', 'hello@islavasolution.net'))))),
         'cc' => array_values(array_filter(array_map('trim', explode(',', (string) env('MAIL_ENQUIRY_CC', 'hello@islavasolution.net,cpe.villanueva.gabrielandrei@gmail.com'))))),

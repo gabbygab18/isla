@@ -21,6 +21,7 @@ import ScrollAreaPro from '@/components/scrollxui/ScrollAreaPro';
 import SpotlightCard from '@/components/scrollxui/SpotlightCard';
 import StaggerButton from '@/components/scrollxui/StaggerButton';
 import EnquiryForm from '@/components/site/EnquiryForm';
+import CalendlyEmbed from '@/components/CalendlyEmbed';
 import Modal from '@/components/site/Modal';
 import PageHero from '@/components/site/PageHero';
 import SectionHead from '@/components/site/SectionHead';
@@ -209,6 +210,8 @@ function Scheduler({ onConfirm, windowDays }) {
 
 export default function BookCall() {
     const setting = makeSetting(usePage().props?.settings);
+    // Set in admin › Settings › Calendly. Blank keeps the enquiry form as-is.
+    const calendlyUrl = setting('calendly_discovery_url', '');
     const [preferredTime, setPreferredTime] = useState('');
     const [formOpen, setFormOpen] = useState(false);
 
@@ -247,14 +250,22 @@ export default function BookCall() {
                 </ul>
             </PageHero>
 
-            {/* scheduler */}
+            {/* scheduler — Calendly when a link is configured, otherwise the
+                built-in picker that hands off to the enquiry form */}
             <section className="pb-4 pt-6" id="schedule">
                 <div className="container-site">
-                    <Scheduler
-                        onConfirm={setPreferredTime}
-                        windowDays={Math.max(1, Number(setting('book_window_days', 14)) || 14)}
-                    />
-                    {preferredTime && (
+                    {calendlyUrl ? (
+                        <div className="rounded-lg border border-hairline-soft bg-white">
+                            <CalendlyEmbed url={calendlyUrl} height={760} />
+                        </div>
+                    ) : (
+                        <Scheduler
+                            onConfirm={setPreferredTime}
+                            windowDays={Math.max(1, Number(setting('book_window_days', 14)) || 14)}
+                        />
+                    )}
+
+                    {!calendlyUrl && preferredTime && (
                         <motion.div
                             initial={{ opacity: 0, y: 12 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -265,13 +276,14 @@ export default function BookCall() {
                                 <p className="mt-1 font-display text-[17px] font-bold">{preferredTime}</p>
                             </div>
                             <StaggerButton type="button" onClick={() => setFormOpen(true)} iconRight={ArrowRight}>
-                                Confirm & send details
+                                Confirm &amp; send details
                             </StaggerButton>
                         </motion.div>
                     )}
+
                     {!preferredTime && (
                         <p className="mt-5 text-center text-[14px] text-ink-soft">
-                            Prefer to skip the calendar?{' '}
+                            {calendlyUrl ? "Can't find a time that works?" : 'Prefer to skip the calendar?'}{' '}
                             <button
                                 type="button"
                                 onClick={() => setFormOpen(true)}

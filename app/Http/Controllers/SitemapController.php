@@ -86,6 +86,8 @@ class SitemapController extends Controller
         $lines = [
             'User-agent: *',
             'Disallow: /admin',
+            // Client share links expose CVs and rates — never index them.
+            'Disallow: /talent',
             'Allow: /',
             '',
             'Sitemap: ' . $base . '/sitemap.xml',

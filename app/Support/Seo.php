@@ -49,7 +49,8 @@ class Seo
             'image'       => static::setting('og_image', $base . '/og-image.png'),
             'brand'       => $brand,
             'locale'      => 'en_AU',
-            'noindex'     => (bool) preg_match('#^admin#', $path),
+            // Admin, and the tokenised client talent links (CVs + rates).
+            'noindex'     => (bool) preg_match('#^(admin|talent)#', $path),
             'schema'      => static::schema($base, $brand, $url, $title, $description, $breadcrumbs, $extraSchema),
         ];
 

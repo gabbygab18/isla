@@ -24,7 +24,7 @@ export default function SettingsIndex({ groups = {}, settings = {} }) {
                         <h3 className="mb-4 text-[16px] font-bold">{groupName}</h3>
                         <div className="grid gap-5">
                             {Object.entries(fields).map(([key, [label, type]]) => (
-                                <div key={key} className="grid gap-1.5">
+                                <div key={key} className="grid content-start gap-1.5">
                                     <label htmlFor={`s_${key}`} className="font-mono text-[11px] font-medium uppercase tracking-[0.05em] text-ink-soft">
                                         {label}
                                     </label>

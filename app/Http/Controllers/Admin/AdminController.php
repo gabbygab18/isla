@@ -615,6 +615,11 @@ class AdminController extends Controller
     private function settingsGroups(): array
     {
         return [
+            'Calendly — booking embeds' => [
+                'calendly_discovery_url' => ['Discovery call scheduling link (leave blank to use the form instead)', 'text'],
+                'calendly_interview_url' => ['Interview scheduling link, shown after a client books from a talent link', 'text'],
+            ],
+
             'SEO — search and social' => [
                 'og_image'                  => ['Share image URL (1200x630)', 'text'],
                 'social_linkedin'           => ['LinkedIn profile URL', 'text'],

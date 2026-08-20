@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             IslaSeeder::class,
             BlogSeeder::class,
             StaffProfileSeeder::class,
+            TalentTaxonomySeeder::class,
         ]);
     }
 }

@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\ShortlistController;
 use App\Http\Controllers\Admin\StaffProfileController;
+use App\Http\Controllers\Admin\TalentTaxonomyController;
+use App\Http\Controllers\TalentBenchController;
 use App\Http\Controllers\IslaController;
 use App\Http\Controllers\LlmsController;
 use App\Http\Controllers\SitemapController;
@@ -49,6 +52,15 @@ Route::get('/services/{service:slug}', [IslaController::class, 'showService'])->
 Route::get('/pricing/{plan:slug}', [IslaController::class, 'showPlan'])->name('isla.pricing.show');
 Route::get('/faq/{faq:slug}', [IslaController::class, 'showFaq'])->name('isla.faqs.show');
 Route::get('/blog/{blog:slug}', [IslaController::class, 'showBlog'])->name('isla.blog.show');
+
+/*
+|--------------------------------------------------------------------------
+| CLIENT TALENT BENCH — unguessable share links only (never linked publicly)
+|--------------------------------------------------------------------------
+*/
+Route::get('/talent/{token}', [TalentBenchController::class, 'show'])->name('talent.show');
+Route::post('/talent/{token}/shortlist', [TalentBenchController::class, 'storeShortlist'])->name('talent.shortlist');
+Route::get('/talent/{token}/booked/{reference}', [TalentBenchController::class, 'booked'])->name('talent.booked');
 
 /*
 |--------------------------------------------------------------------------
@@ -139,6 +151,22 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/staff-profiles/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff-profiles.update');
         Route::delete('/staff-profiles/{staffProfile}', [StaffProfileController::class, 'destroy'])->name('staff-profiles.destroy');
         Route::get('/staff-profiles/{staffProfile}', [StaffProfileController::class, 'show'])->name('staff-profiles.show');
+
+        // Talent taxonomy — roles, sub-roles and their client share links
+        Route::get('/talent-taxonomy', [TalentTaxonomyController::class, 'index'])->name('talent-taxonomy');
+        Route::post('/talent-taxonomy/roles', [TalentTaxonomyController::class, 'storeRole'])->name('talent-taxonomy.roles.store');
+        Route::put('/talent-taxonomy/roles/{role}', [TalentTaxonomyController::class, 'updateRole'])->name('talent-taxonomy.roles.update');
+        Route::delete('/talent-taxonomy/roles/{role}', [TalentTaxonomyController::class, 'destroyRole'])->name('talent-taxonomy.roles.destroy');
+        Route::post('/talent-taxonomy/roles/{role}/token', [TalentTaxonomyController::class, 'regenerateRoleToken'])->name('talent-taxonomy.roles.token');
+        Route::post('/talent-taxonomy/roles/{role}/sub-roles', [TalentTaxonomyController::class, 'storeSubRole'])->name('talent-taxonomy.sub-roles.store');
+        Route::put('/talent-taxonomy/sub-roles/{subRole}', [TalentTaxonomyController::class, 'updateSubRole'])->name('talent-taxonomy.sub-roles.update');
+        Route::delete('/talent-taxonomy/sub-roles/{subRole}', [TalentTaxonomyController::class, 'destroySubRole'])->name('talent-taxonomy.sub-roles.destroy');
+        Route::post('/talent-taxonomy/sub-roles/{subRole}/token', [TalentTaxonomyController::class, 'regenerateSubRoleToken'])->name('talent-taxonomy.sub-roles.token');
+
+        // Client shortlists submitted from the shared talent links
+        Route::get('/shortlists', [ShortlistController::class, 'index'])->name('shortlists');
+        Route::get('/shortlists/{shortlist}', [ShortlistController::class, 'show'])->name('shortlists.show');
+        Route::delete('/shortlists/{shortlist}', [ShortlistController::class, 'destroy'])->name('shortlists.destroy');
 
         // Nav items (dynamic navigation)
         Route::get('/nav-items', [AdminController::class, 'navItems'])->name('nav-items');

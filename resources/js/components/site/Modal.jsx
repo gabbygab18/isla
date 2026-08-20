@@ -6,7 +6,7 @@ import { X } from 'lucide-react';
  * Centered dialog overlay — backdrop click or Escape closes it,
  * body scroll is locked while open.
  */
-export default function Modal({ open, onClose, label = 'Dialog', children }) {
+export default function Modal({ open, onClose, label = 'Dialog', size = 'md', children }) {
     useEffect(() => {
         if (!open) return undefined;
         const onKey = (e) => e.key === 'Escape' && onClose();
@@ -39,7 +39,7 @@ export default function Modal({ open, onClose, label = 'Dialog', children }) {
                         exit={{ opacity: 0, y: 16, scale: 0.98 }}
                         transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                         onClick={(e) => e.stopPropagation()}
-                        className="relative max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-lg bg-white p-6 shadow-float sm:p-8"
+                        className={`relative max-h-[90vh] w-full ${size === 'lg' ? 'max-w-3xl' : 'max-w-xl'} overflow-y-auto rounded-lg bg-white p-6 shadow-float sm:p-8`}
                     >
                         <button
                             type="button"

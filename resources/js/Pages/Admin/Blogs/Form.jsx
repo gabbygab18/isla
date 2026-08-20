@@ -4,7 +4,7 @@ import CKEditorField from '@/components/admin/CKEditorField';
 
 function Field({ label, htmlFor, hint, error, children }) {
     return (
-        <div className="grid gap-1.5">
+        <div className="grid content-start gap-1.5">
             <label htmlFor={htmlFor} className="font-mono text-[11px] font-medium uppercase tracking-[0.05em] text-ink-soft">{label}</label>
             {children}
             {hint && !error && <span className="text-[12px] text-ink-soft">{hint}</span>}

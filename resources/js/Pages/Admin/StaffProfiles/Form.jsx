@@ -2,12 +2,16 @@ import { useState } from 'react';
 import { Link, useForm } from '@inertiajs/react';
 import { Plus, Trash2 } from 'lucide-react';
 import AdminProfileLayout from '@/Layouts/AdminProfileLayout';
+import ImageCropper from '@/components/admin/ImageCropper';
 
 const inputClass = 'w-full rounded-md border border-hairline bg-white px-3 py-2.5 text-[14px] text-ink outline-none transition-colors focus:border-ink/40';
 
+// content-start keeps the rows packed to the top: side-by-side fields in a
+// grid row stretch to the tallest sibling, so a field without a hint would
+// otherwise absorb the leftover height and push its input out of line.
 function Field({ label, htmlFor, hint, error, children }) {
     return (
-        <div className="grid gap-1.5">
+        <div className="grid content-start gap-1.5">
             <label htmlFor={htmlFor} className="font-mono text-[11px] font-medium uppercase tracking-[0.05em] text-ink-soft">{label}</label>
             {children}
             {hint && !error && <span className="text-[12px] text-ink-soft">{hint}</span>}
@@ -33,7 +37,7 @@ function Card({ title, children, onRemove }) {
 const emptyEducation = () => ({ school: '', degree: '', period: '' });
 const emptyExperience = () => ({ company: '', title: '', period: '', bulletsText: '' });
 
-export default function StaffProfileForm({ profile }) {
+export default function StaffProfileForm({ profile, roles = [] }) {
     const isEdit = !!profile;
 
     const [education, setEducation] = useState(
@@ -44,6 +48,12 @@ export default function StaffProfileForm({ profile }) {
             company: e.company || '', title: e.title || '', period: e.period || '', bulletsText: (e.bullets || []).join('\n'),
         })),
     );
+
+    const [photoFile, setPhotoFile] = useState(null);
+    const [photoPreview, setPhotoPreview] = useState(profile?.photo_display_url ?? null);
+    const [removePhoto, setRemovePhoto] = useState(false);
+    const [cropSrc, setCropSrc] = useState(null);
+    const [cropName, setCropName] = useState('photo.jpg');
 
     const form = useForm({
         name: profile?.name ?? '',
@@ -57,9 +67,14 @@ export default function StaffProfileForm({ profile }) {
         software_expertise_text: (profile?.software_expertise ?? []).join('\n'),
         certifications_text: (profile?.certifications ?? []).join('\n'),
         affiliations_text: (profile?.affiliations ?? []).join('\n'),
+        talent_role_id: profile?.talent_role_id ?? '',
+        talent_sub_role_id: profile?.talent_sub_role_id ?? '',
         sort_order: profile?.sort_order ?? 0,
         is_active: profile?.is_active ?? true,
     });
+
+    const selectedRole = roles.find((r) => String(r.id) === String(form.data.talent_role_id));
+    const subRoleOptions = selectedRole?.sub_roles ?? [];
 
     const toLines = (text) => text.split('\n').map((s) => s.trim()).filter(Boolean);
 
@@ -74,6 +89,8 @@ export default function StaffProfileForm({ profile }) {
             work_preference: form.data.work_preference,
             availability: form.data.availability,
             about_me: form.data.about_me,
+            talent_role_id: form.data.talent_role_id || null,
+            talent_sub_role_id: form.data.talent_sub_role_id || null,
             core_skills: toLines(form.data.core_skills_text),
             software_expertise: toLines(form.data.software_expertise_text),
             certifications: toLines(form.data.certifications_text),
@@ -84,10 +101,31 @@ export default function StaffProfileForm({ profile }) {
             })),
             sort_order: form.data.sort_order,
             is_active: form.data.is_active,
+            remove_photo: removePhoto,
         };
 
-        if (isEdit) form.transform(() => payload).put(`/admin/staff-profiles/${profile.slug}`);
-        else form.transform(() => payload).post('/admin/staff-profiles');
+        // transform() returns undefined (it just stores the callback), so it has
+        // to be called on its own — chaining .put()/.post() off it throws.
+        form.transform(() => payload);
+
+        const options = { onError: () => window.scrollTo({ top: 0, behavior: 'smooth' }) };
+
+        // A file can't be sent over a real PUT, so edits with a new photo go out
+        // as POST + _method spoofing over FormData. Without a file we keep the
+        // plain JSON path, which serialises the nested education/experience
+        // arrays more predictably.
+        if (photoFile) {
+            payload.photo = photoFile;
+            if (isEdit) payload._method = 'put';
+            form.post(
+                isEdit ? `/admin/staff-profiles/${profile.slug}` : '/admin/staff-profiles',
+                { ...options, forceFormData: true },
+            );
+            return;
+        }
+
+        if (isEdit) form.put(`/admin/staff-profiles/${profile.slug}`, options);
+        else form.post('/admin/staff-profiles', options);
     };
 
     return (
@@ -99,10 +137,69 @@ export default function StaffProfileForm({ profile }) {
                     </div>
                     <h1 className="t-display-lg mb-8">{isEdit ? `Edit ${profile.name}` : 'New Staff Profile'}</h1>
 
+                    {Object.keys(form.errors).length > 0 && (
+                        <div className="mb-6 rounded-lg bg-rose-soft px-5 py-4 text-[14px] text-rose-deep">
+                            <p className="font-bold">Couldn't save — please fix the following:</p>
+                            <ul className="mt-2 list-disc pl-5">
+                                {Object.entries(form.errors).map(([field, message]) => (
+                                    <li key={field}>{message}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
                     <form onSubmit={submit} className="flex flex-col gap-8">
                         <div className="rounded-lg border border-hairline-soft bg-white p-6">
                             <h3 className="mb-4 text-[15px] font-bold">Basics</h3>
                             <div className="grid gap-5">
+                                <Field label="Profile picture" htmlFor="photo" hint="JPG, PNG or WEBP · max 4MB. Square images look best." error={form.errors.photo}>
+                                    <div className="flex items-center gap-4">
+                                        <span className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border border-hairline bg-gradient-to-br from-rose-soft to-rose-deep/30">
+                                            {photoPreview ? (
+                                                <img src={photoPreview} alt="" className="h-full w-full object-cover" />
+                                            ) : (
+                                                <img src="/butterfly.png" alt="" className="h-8 w-8 opacity-70" />
+                                            )}
+                                        </span>
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            <label
+                                                htmlFor="photo"
+                                                className="cursor-pointer rounded-md border border-hairline bg-white px-4 py-2 text-[13.5px] font-semibold text-ink transition-colors hover:bg-cream"
+                                            >
+                                                {photoPreview ? 'Change photo' : 'Upload photo'}
+                                            </label>
+                                            {photoPreview && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setPhotoFile(null);
+                                                        setPhotoPreview(null);
+                                                        setRemovePhoto(true);
+                                                    }}
+                                                    className="rounded-md border border-hairline px-4 py-2 text-[13.5px] font-semibold text-[#b23b3b] transition-colors hover:border-[#b23b3b]/40"
+                                                >
+                                                    Remove
+                                                </button>
+                                            )}
+                                        </div>
+                                        <input
+                                            id="photo"
+                                            type="file"
+                                            accept="image/jpeg,image/png,image/webp"
+                                            className="sr-only"
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0] ?? null;
+                                                if (!file) return;
+                                                // Straight into the cropper — the file that finally gets
+                                                // attached is the cropped square, not the raw upload.
+                                                setCropName(file.name);
+                                                setCropSrc(URL.createObjectURL(file));
+                                                e.target.value = ''; // let the same file be re-picked later
+                                            }}
+                                        />
+                                    </div>
+                                </Field>
+
                                 <div className="grid gap-5 sm:grid-cols-2">
                                     <Field label="Name" htmlFor="name" error={form.errors.name}>
                                         <input id="name" className={inputClass} value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} required />
@@ -111,6 +208,36 @@ export default function StaffProfileForm({ profile }) {
                                         <input id="role_title" className={inputClass} value={form.data.role_title} onChange={(e) => form.setData('role_title', e.target.value)} required />
                                     </Field>
                                 </div>
+                                <div className="grid gap-5 sm:grid-cols-2">
+                                    <Field label="Industry" htmlFor="talent_role_id" hint="Drives which client link this profile appears under.">
+                                        <select
+                                            id="talent_role_id"
+                                            className={inputClass}
+                                            value={form.data.talent_role_id}
+                                            onChange={(e) => {
+                                                form.setData('talent_role_id', e.target.value);
+                                                // Roles belong to an industry — clear the stale one on change.
+                                                form.setData('talent_sub_role_id', '');
+                                            }}
+                                        >
+                                            <option value="">— None —</option>
+                                            {roles.map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}
+                                        </select>
+                                    </Field>
+                                    <Field label="Role" htmlFor="talent_sub_role_id" hint={selectedRole ? 'Which role the client picks on the industry link.' : 'Pick an industry first.'}>
+                                        <select
+                                            id="talent_sub_role_id"
+                                            className={inputClass}
+                                            value={form.data.talent_sub_role_id}
+                                            onChange={(e) => form.setData('talent_sub_role_id', e.target.value)}
+                                            disabled={!selectedRole || subRoleOptions.length === 0}
+                                        >
+                                            <option value="">— None —</option>
+                                            {subRoleOptions.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+                                        </select>
+                                    </Field>
+                                </div>
+
                                 <div className="grid gap-5 sm:grid-cols-2">
                                     <Field label="Category" htmlFor="category" hint="e.g. Construction, Marketing, NDIS">
                                         <input id="category" list="category-options" className={inputClass} value={form.data.category} onChange={(e) => form.setData('category', e.target.value)} />
@@ -136,7 +263,7 @@ export default function StaffProfileForm({ profile }) {
                                 <Field label="Rate" htmlFor="rate" hint="e.g. 16 AUD per hour">
                                     <input id="rate" className={inputClass} value={form.data.rate} onChange={(e) => form.setData('rate', e.target.value)} />
                                 </Field>
-                                <Field label="Work preference" htmlFor="work_preference">
+                                <Field label="Work preference" htmlFor="work_preference" hint="e.g. Full Time (40hrs per week)">
                                     <input id="work_preference" className={inputClass} value={form.data.work_preference} onChange={(e) => form.setData('work_preference', e.target.value)} />
                                 </Field>
                                 <Field label="Availability" htmlFor="availability" hint="e.g. Immediately">
@@ -244,6 +371,24 @@ export default function StaffProfileForm({ profile }) {
                     </form>
                 </div>
             </section>
+
+            {cropSrc && (
+                <ImageCropper
+                    src={cropSrc}
+                    fileName={cropName}
+                    onCancel={() => {
+                        URL.revokeObjectURL(cropSrc);
+                        setCropSrc(null);
+                    }}
+                    onApply={(croppedFile) => {
+                        URL.revokeObjectURL(cropSrc);
+                        setCropSrc(null);
+                        setPhotoFile(croppedFile);
+                        setRemovePhoto(false);
+                        setPhotoPreview(URL.createObjectURL(croppedFile));
+                    }}
+                />
+            )}
         </AdminProfileLayout>
     );
 }

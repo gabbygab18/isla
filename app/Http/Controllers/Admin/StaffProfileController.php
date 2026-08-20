@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\StaffProfile;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -25,7 +26,7 @@ class StaffProfileController extends Controller
     {
         return Inertia::render('Admin/StaffProfiles/Index', [
             'profiles' => StaffProfile::orderBy('sort_order')->get([
-                'id', 'name', 'slug', 'role_title', 'category', 'photo_url', 'about_me', 'rate', 'availability', 'is_active',
+                'id', 'name', 'slug', 'role_title', 'category', 'photo_url', 'about_me', 'rate', 'availability', 'is_active', 'core_skills',
             ]),
         ]);
     }
@@ -42,13 +43,35 @@ class StaffProfileController extends Controller
 
     public function create(): Response
     {
-        return Inertia::render('Admin/StaffProfiles/Form', ['profile' => null]);
+        return Inertia::render('Admin/StaffProfiles/Form', [
+            'profile' => null,
+            'roles'   => $this->roleOptions(),
+        ]);
+    }
+
+    /** Role list (with nested sub-roles) powering the dependent dropdowns. */
+    private function roleOptions()
+    {
+        return \App\Models\TalentRole::active()
+            ->with(['subRoles' => fn ($q) => $q->where('is_active', true)])
+            ->get()
+            ->map(fn ($r) => [
+                'id'        => $r->id,
+                'name'      => $r->name,
+                'category'  => $r->category,
+                'sub_roles' => $r->subRoles->map->only(['id', 'name'])->values(),
+            ]);
     }
 
     public function store(Request $request)
     {
         $data = $this->validateProfile($request);
         $data['slug'] = $this->uniqueSlug($data['name'], $data['role_title']);
+
+        if ($request->hasFile('photo')) {
+            $data['photo_url'] = $request->file('photo')->store('staff-photos', 'public');
+        }
+
         StaffProfile::create($data);
 
         return redirect()->route('admin.staff-profiles')->with('success', 'Profile created.');
@@ -56,7 +79,10 @@ class StaffProfileController extends Controller
 
     public function edit(StaffProfile $staffProfile): Response
     {
-        return Inertia::render('Admin/StaffProfiles/Form', ['profile' => $staffProfile]);
+        return Inertia::render('Admin/StaffProfiles/Form', [
+            'profile' => $staffProfile,
+            'roles'   => $this->roleOptions(),
+        ]);
     }
 
     public function update(Request $request, StaffProfile $staffProfile)
@@ -65,6 +91,15 @@ class StaffProfileController extends Controller
         if ($data['name'] !== $staffProfile->name || $data['role_title'] !== $staffProfile->role_title) {
             $data['slug'] = $this->uniqueSlug($data['name'], $data['role_title'], $staffProfile->id);
         }
+
+        if ($request->hasFile('photo')) {
+            $this->deleteUploadedPhoto($staffProfile);
+            $data['photo_url'] = $request->file('photo')->store('staff-photos', 'public');
+        } elseif ($request->boolean('remove_photo')) {
+            $this->deleteUploadedPhoto($staffProfile);
+            $data['photo_url'] = null;
+        }
+
         $staffProfile->update($data);
 
         return redirect()->route('admin.staff-profiles')->with('success', 'Profile updated.');
@@ -72,9 +107,23 @@ class StaffProfileController extends Controller
 
     public function destroy(StaffProfile $staffProfile)
     {
+        $this->deleteUploadedPhoto($staffProfile);
         $staffProfile->delete();
 
         return back()->with('success', 'Profile deleted.');
+    }
+
+    /**
+     * Only removes files we stored ourselves — externally-hosted photo_url
+     * values (set via CSV import) are just references, nothing to clean up.
+     */
+    private function deleteUploadedPhoto(StaffProfile $profile): void
+    {
+        $path = $profile->photo_url;
+
+        if ($path && ! Str::startsWith($path, ['http://', 'https://', '/'])) {
+            Storage::disk('public')->delete($path);
+        }
     }
 
     /* =========================================================
@@ -90,7 +139,8 @@ class StaffProfileController extends Controller
     {
         $headers = $this->csvHeaders();
         $example = [
-            'jane-example-role-title', 'Jane Doe', 'Virtual Assistant', 'NDIS', '16 AUD per hour',
+            'jane-example-role-title', 'Jane Doe', 'Virtual Assistant',
+            'https://example.com/photo.jpg', 'NDIS', '16 AUD per hour',
             'Full Time (40hrs per week)', 'Immediately',
             'Detail-oriented virtual assistant with experience in...',
             'Client Intake|Scheduling|Documentation', 'Microsoft Office|ShiftCare', 'Cert IV in Business', 'Member, Example Association',
@@ -174,6 +224,9 @@ class StaffProfileController extends Controller
         $validated = $request->validate([
             'name'              => 'required|string|max:255',
             'role_title'        => 'required|string|max:255',
+            'photo'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'talent_role_id'    => 'nullable|exists:talent_roles,id',
+            'talent_sub_role_id' => 'nullable|exists:talent_sub_roles,id',
             'category'          => 'nullable|string|max:100',
             'rate'              => 'nullable|string|max:100',
             'work_preference'   => 'nullable|string|max:255',
@@ -217,6 +270,9 @@ class StaffProfileController extends Controller
         $validated['is_active'] = $request->boolean('is_active', true);
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
 
+        // The uploaded file is handled separately — it must not reach mass assignment.
+        unset($validated['photo']);
+
         return $validated;
     }
 
@@ -235,7 +291,7 @@ class StaffProfileController extends Controller
 
     private function csvHeaders(): array
     {
-        $headers = ['slug', 'name', 'role_title', 'category', 'rate', 'work_preference', 'availability', 'about_me', 'core_skills', 'software_expertise', 'certifications', 'affiliations'];
+        $headers = ['slug', 'name', 'role_title', 'photo_url', 'category', 'rate', 'work_preference', 'availability', 'about_me', 'core_skills', 'software_expertise', 'certifications', 'affiliations'];
 
         for ($i = 1; $i <= self::EDUCATION_SLOTS; $i++) {
             $headers = [...$headers, "education_{$i}_school", "education_{$i}_degree", "education_{$i}_period"];
@@ -280,8 +336,11 @@ class StaffProfileController extends Controller
         }
 
         $isActiveCell = strtolower(trim((string) ($cells['is_active'] ?? '')));
+        $photoUrl = trim((string) ($cells['photo_url'] ?? ''));
 
-        return [
+        return array_filter([
+            'photo_url' => $photoUrl ?: null,
+        ], fn ($v) => $v !== null) + [
             'name'               => trim((string) $cells['name']),
             'role_title'         => trim((string) $cells['role_title']),
             'category'           => trim((string) ($cells['category'] ?? '')) ?: null,

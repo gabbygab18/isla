@@ -5,6 +5,7 @@ import { ArrowRight, Pencil, Plus, Trash2, Upload } from 'lucide-react';
 import AdminProfileLayout from '@/Layouts/AdminProfileLayout';
 import RevealText from '@/components/scrollxui/RevealText';
 import SpotlightCard from '@/components/scrollxui/SpotlightCard';
+import ProfileCard from '@/components/ui/profilecard';
 import {
     Pagination,
     PaginationContent,
@@ -27,6 +28,39 @@ function CategoryPill({ category }) {
         <span className={`rounded-pill px-3 py-1 text-[11.5px] font-bold uppercase tracking-wide ${CATEGORY_STYLE[category] || 'bg-ink/10 text-ink'}`}>
             {category || 'General'}
         </span>
+    );
+}
+
+function HiddenPill() {
+    return (
+        <span className="rounded-pill bg-black/5 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-ink-soft">Hidden</span>
+    );
+}
+
+// Shared by both card variants — a profile with a photo gets the ProfileCard,
+// one without falls back to the plain content card, but the admin actions are
+// identical either way.
+function CardActions({ profile, onDelete, pendingDelete }) {
+    const iconButton = 'inline-flex h-8 w-8 items-center justify-center rounded-md border border-hairline bg-white transition-colors';
+
+    return (
+        <div className="flex items-center gap-1.5">
+            <Link href={`/admin/staff-profiles/${profile.slug}`} className={`${iconButton} text-ink-soft hover:border-ink/40 hover:text-ink`} title="View">
+                <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.4} />
+            </Link>
+            <Link href={`/admin/staff-profiles/${profile.slug}/edit`} className={`${iconButton} text-ink-soft hover:border-ink/40 hover:text-ink`} title="Edit">
+                <Pencil className="h-3.5 w-3.5" />
+            </Link>
+            <button
+                type="button"
+                onClick={() => onDelete(profile)}
+                disabled={pendingDelete === profile.id}
+                className={`${iconButton} text-[#b23b3b] hover:border-[#b23b3b]/40 disabled:opacity-50`}
+                title="Delete"
+            >
+                <Trash2 className="h-3.5 w-3.5" />
+            </button>
+        </div>
     );
 }
 
@@ -110,59 +144,54 @@ export default function StaffProfilesIndex({ profiles = [] }) {
                                     viewport={{ once: true, margin: '-6% 0px' }}
                                     transition={{ duration: 0.5, delay: (i % 6) * 0.06, ease: [0.22, 1, 0.36, 1] }}
                                 >
-                                    <SpotlightCard className="flex h-full flex-col">
-                                        <Link href={`/admin/staff-profiles/${profile.slug}`} className="mb-5 flex items-center gap-3.5">
-                                            <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-rose-deep/30 bg-gradient-to-br from-rose-soft to-rose-deep/40">
-                                                <img src="/butterfly.png" alt="" className="h-6 w-6 opacity-80" />
-                                            </span>
-                                            <div>
-                                                <h3 className="t-card-title leading-tight">{profile.name}</h3>
-                                                <p className="mt-0.5 text-[13px] font-medium text-ink-soft">{profile.role_title}</p>
+                                    {profile.photo_display_url ? (
+                                        <div className="flex h-full flex-col items-center gap-3">
+                                            <ProfileCard
+                                                img={profile.photo_display_url}
+                                                name={profile.name}
+                                                position={profile.role_title}
+                                                bio={profile.about_me
+                                                    ? (profile.about_me.length > 150 ? `${profile.about_me.slice(0, 150).trim()}…` : profile.about_me)
+                                                    : ''}
+                                                spotlight
+                                            />
+                                            <div className="flex w-[17rem] items-center justify-between gap-2">
+                                                <div className="flex flex-wrap items-center gap-1.5">
+                                                    <CategoryPill category={profile.category} />
+                                                    {!profile.is_active && <HiddenPill />}
+                                                </div>
+                                                <CardActions profile={profile} onDelete={destroy} pendingDelete={pendingDelete} />
                                             </div>
-                                        </Link>
-                                        <div className="flex flex-wrap items-center gap-2">
-                                            <CategoryPill category={profile.category} />
-                                            {!profile.is_active && (
-                                                <span className="rounded-pill bg-black/5 px-3 py-1 text-[11.5px] font-bold uppercase tracking-wide text-ink-soft">Hidden</span>
+                                        </div>
+                                    ) : (
+                                        <SpotlightCard className="flex h-full flex-col">
+                                            <Link href={`/admin/staff-profiles/${profile.slug}`} className="mb-5 flex items-center gap-3.5">
+                                                <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-rose-deep/30 bg-gradient-to-br from-rose-soft to-rose-deep/40">
+                                                    <img src="/butterfly.png" alt="" className="h-6 w-6 opacity-80" />
+                                                </span>
+                                                <div>
+                                                    <h3 className="t-card-title leading-tight">{profile.name}</h3>
+                                                    <p className="mt-0.5 text-[13px] font-medium text-ink-soft">{profile.role_title}</p>
+                                                </div>
+                                            </Link>
+                                            <div className="flex flex-wrap items-center gap-2">
+                                                <CategoryPill category={profile.category} />
+                                                {!profile.is_active && <HiddenPill />}
+                                            </div>
+                                            {profile.about_me && (
+                                                <p className="mt-4 flex-1 text-[14.5px] leading-relaxed text-ink-soft">
+                                                    {profile.about_me.length > 140 ? `${profile.about_me.slice(0, 140).trim()}…` : profile.about_me}
+                                                </p>
                                             )}
-                                        </div>
-                                        {profile.about_me && (
-                                            <p className="mt-4 flex-1 text-[14.5px] leading-relaxed text-ink-soft">
-                                                {profile.about_me.length > 140 ? `${profile.about_me.slice(0, 140).trim()}…` : profile.about_me}
-                                            </p>
-                                        )}
-                                        <div className="mt-5 flex items-center justify-between border-t border-hairline-soft pt-4">
-                                            <div className="text-[12.5px] text-ink-soft">
-                                                {profile.rate && <span className="font-bold text-ink">{profile.rate}</span>}
-                                                {profile.availability && <span> · {profile.availability}</span>}
+                                            <div className="mt-5 flex items-center justify-between border-t border-hairline-soft pt-4">
+                                                <div className="text-[12.5px] text-ink-soft">
+                                                    {profile.rate && <span className="font-bold text-ink">{profile.rate}</span>}
+                                                    {profile.availability && <span> · {profile.availability}</span>}
+                                                </div>
+                                                <CardActions profile={profile} onDelete={destroy} pendingDelete={pendingDelete} />
                                             </div>
-                                            <div className="flex items-center gap-1.5">
-                                                <Link
-                                                    href={`/admin/staff-profiles/${profile.slug}`}
-                                                    className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-hairline text-ink-soft transition-colors hover:border-ink/40 hover:text-ink"
-                                                    title="View"
-                                                >
-                                                    <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.4} />
-                                                </Link>
-                                                <Link
-                                                    href={`/admin/staff-profiles/${profile.slug}/edit`}
-                                                    className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-hairline text-ink-soft transition-colors hover:border-ink/40 hover:text-ink"
-                                                    title="Edit"
-                                                >
-                                                    <Pencil className="h-3.5 w-3.5" />
-                                                </Link>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => destroy(profile)}
-                                                    disabled={pendingDelete === profile.id}
-                                                    className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-hairline text-[#b23b3b] transition-colors hover:border-[#b23b3b]/40 disabled:opacity-50"
-                                                    title="Delete"
-                                                >
-                                                    <Trash2 className="h-3.5 w-3.5" />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </SpotlightCard>
+                                        </SpotlightCard>
+                                    )}
                                 </motion.div>
                             ))}
                         </div>

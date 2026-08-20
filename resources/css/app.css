@@ -9,20 +9,63 @@
    Geist (body) + Geist Mono (captions).
    ========================================================================== */
 
+/* Palette lives as raw "R G B" channels so Tailwind can build every utility
+   from them *and* keep opacity modifiers working (bg-ink/40, text-cream/80…).
+   Dark mode then only has to swap these channels — no component touches the
+   colours directly, so the whole app flips at once. */
 :root {
-    --cream: #fdf7ef;
-    --white: #ffffff;
-    --rose: #db9496;
-    --sage: #8f9d77;
-    --ink: #2b2723;
-    --ink-soft: #6b6259;
-    --rose-deep: #c17579;
-    --rose-soft: #f2dcdd;
-    --sage-deep: #6f7d5c;
-    --sage-soft: #e6e9db;
-    --hairline: rgba(43, 39, 35, 0.16);
-    --hairline-soft: rgba(43, 39, 35, 0.09);
-    --on-inverse-soft: rgba(253, 247, 239, 0.14);
+    --c-cream: 253 247 239;
+    --c-white: 255 255 255;
+    --c-rose: 219 148 150;
+    --c-rose-deep: 193 117 121;
+    --c-rose-soft: 242 220 221;
+    --c-sage: 143 157 119;
+    --c-sage-deep: 111 125 92;
+    --c-sage-soft: 230 233 219;
+    --c-ink: 43 39 35;
+    --c-ink-soft: 107 98 89;
+    --c-muted: 241 236 227;
+    --hairline-alpha: 0.16;
+    --hairline-soft-alpha: 0.09;
+    --c-hairline: 43 39 35;
+}
+
+.dark {
+    /* Warm charcoal rather than pure black, so the rose/sage accents keep
+       their character instead of glowing against a void. */
+    --c-cream: 26 24 22;
+    --c-white: 38 35 32;
+    --c-rose: 226 163 165;
+    --c-rose-deep: 224 150 154;
+    --c-rose-soft: 61 45 46;
+    --c-sage: 163 178 137;
+    --c-sage-deep: 168 184 141;
+    --c-sage-soft: 48 54 42;
+    --c-ink: 245 238 230;
+    --c-ink-soft: 178 168 157;
+    --c-muted: 45 42 38;
+    --hairline-alpha: 0.22;
+    --hairline-soft-alpha: 0.14;
+    --c-hairline: 245 238 230;
+}
+
+/* Legacy hex aliases — a few Blade views and vendored components still read
+   these directly; deriving them from the channels keeps them in sync. */
+:root,
+.dark {
+    --cream: rgb(var(--c-cream));
+    --white: rgb(var(--c-white));
+    --rose: rgb(var(--c-rose));
+    --sage: rgb(var(--c-sage));
+    --ink: rgb(var(--c-ink));
+    --ink-soft: rgb(var(--c-ink-soft));
+    --rose-deep: rgb(var(--c-rose-deep));
+    --rose-soft: rgb(var(--c-rose-soft));
+    --sage-deep: rgb(var(--c-sage-deep));
+    --sage-soft: rgb(var(--c-sage-soft));
+    --hairline: rgb(var(--c-hairline) / var(--hairline-alpha));
+    --hairline-soft: rgb(var(--c-hairline) / var(--hairline-soft-alpha));
+    --on-inverse-soft: rgb(var(--c-cream) / 0.14);
 }
 
 @layer base {
@@ -176,6 +219,50 @@
     .blog-body figcaption {
         @apply t-caption text-center text-ink-soft/70;
     }
+}
+
+/* ── Talent presentation ────────────────────────────────────────────────
+   Keep ChromaGrid's native card proportions (square portrait + info footer);
+   the candidates slide scrolls rather than squashing cards to fit. */
+/* Roles with only one or two candidates left the cards stranded at the top of
+   the slide; `safe center` centres a short grid but still scrolls from the top
+   once there are enough cards to overflow. */
+.talent-grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: safe center;
+}
+
+.talent-grid .chroma-grid {
+    height: auto;
+    padding: 0;
+    gap: 1rem;
+    flex: none;
+}
+
+.talent-grid .chroma-card {
+    height: auto;
+}
+
+.talent-grid .chroma-img-wrapper {
+    aspect-ratio: 1 / 1;
+    flex: none;
+    padding: 10px;
+}
+
+.talent-grid .chroma-img-wrapper img,
+.talent-grid .chroma-img-wrapper > div {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Wheel options are a single nowrap line inside an overflow-hidden box. The size
+   that actually fits is measured in JS against the real column width — a CSS
+   clamp here would override that inline value rather than cap it. */
+.talent-wheel .option-wheel__item {
+    max-width: 100%;
 }
 
 /* Hide scrollbars on marquee-style tracks */

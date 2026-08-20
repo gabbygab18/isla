@@ -3,7 +3,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 
 function Field({ label, htmlFor, error, children }) {
     return (
-        <div className="grid gap-1.5">
+        <div className="grid content-start gap-1.5">
             <label htmlFor={htmlFor} className="font-mono text-[11px] font-medium uppercase tracking-[0.05em] text-ink-soft">{label}</label>
             {children}
             {error && <span className="text-[12.5px] text-[#b23b3b]">{error}</span>}

@@ -67,6 +67,7 @@ function ExperienceList({ jobs }) {
 export default function StaffProfileShow({ profile, others = [] }) {
     const {
         slug, name, role_title: roleTitle, category, about_me: aboutMe, rate, work_preference: workPreference,
+        photo_display_url: photoUrl,
         availability, experience, education, core_skills: coreSkillsRaw, software_expertise: softwareExpertiseRaw,
         certifications: certificationsRaw, affiliations: affiliationsRaw,
     } = profile;
@@ -109,15 +110,29 @@ export default function StaffProfileShow({ profile, others = [] }) {
                         </Link>
                     </div>
 
-                    <RevealText text={name} as="h1" className="t-display-xl" />
-                    <motion.p
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.35, duration: 0.5 }}
-                        className="t-body-lg mt-3 max-w-2xl font-semibold text-ink-soft"
-                    >
-                        {roleTitle}
-                    </motion.p>
+                    <div className="flex flex-wrap items-center gap-6">
+                        {photoUrl && (
+                            <motion.span
+                                initial={{ opacity: 0, scale: 0.94 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5 }}
+                                className="h-28 w-28 shrink-0 overflow-hidden rounded-full border border-hairline shadow-card"
+                            >
+                                <img src={photoUrl} alt={name} className="h-full w-full object-cover" />
+                            </motion.span>
+                        )}
+                        <div className="min-w-0">
+                            <RevealText text={name} as="h1" className="t-display-xl" />
+                            <motion.p
+                                initial={{ opacity: 0, y: 12 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.35, duration: 0.5 }}
+                                className="t-body-lg mt-3 max-w-2xl font-semibold text-ink-soft"
+                            >
+                                {roleTitle}
+                            </motion.p>
+                        </div>
+                    </div>
 
                     <motion.div
                         initial={{ opacity: 0, y: 16 }}

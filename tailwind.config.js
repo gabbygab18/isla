@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+    // next-themes toggles `class="dark"` on <html>, so the variants must be
+    // class-driven rather than the default `media` (which follows the OS).
+    darkMode: 'class',
     content: [
         './resources/views/app.blade.php',
         './resources/js/**/*.{js,jsx}',
@@ -12,44 +15,50 @@ export default {
         },
         extend: {
             colors: {
-                // ── Isla brand swatches (unchanged from the Blade build) ──
-                cream: '#fdf7ef',
+                // ── Isla brand swatches, driven by the channel variables in
+                // app.css so `.dark` can repaint the whole palette. The
+                // <alpha-value> placeholder keeps modifiers like bg-ink/40 working.
+                cream: 'rgb(var(--c-cream) / <alpha-value>)',
+                white: 'rgb(var(--c-white) / <alpha-value>)',
                 rose: {
-                    DEFAULT: '#db9496',
-                    deep: '#c17579',
-                    soft: '#f2dcdd',
+                    DEFAULT: 'rgb(var(--c-rose) / <alpha-value>)',
+                    deep: 'rgb(var(--c-rose-deep) / <alpha-value>)',
+                    soft: 'rgb(var(--c-rose-soft) / <alpha-value>)',
                 },
                 sage: {
-                    DEFAULT: '#8f9d77',
-                    deep: '#6f7d5c',
-                    soft: '#e6e9db',
+                    DEFAULT: 'rgb(var(--c-sage) / <alpha-value>)',
+                    deep: 'rgb(var(--c-sage-deep) / <alpha-value>)',
+                    soft: 'rgb(var(--c-sage-soft) / <alpha-value>)',
                 },
                 ink: {
-                    DEFAULT: '#2b2723',
-                    soft: '#6b6259',
+                    DEFAULT: 'rgb(var(--c-ink) / <alpha-value>)',
+                    soft: 'rgb(var(--c-ink-soft) / <alpha-value>)',
                 },
                 hairline: {
-                    DEFAULT: 'rgba(43, 39, 35, 0.16)',
-                    soft: 'rgba(43, 39, 35, 0.09)',
+                    DEFAULT: 'rgb(var(--c-hairline) / var(--hairline-alpha))',
+                    soft: 'rgb(var(--c-hairline) / var(--hairline-soft-alpha))',
                 },
-                'on-inverse-soft': 'rgba(253, 247, 239, 0.14)',
+                'on-inverse-soft': 'rgb(var(--c-cream) / 0.14)',
 
                 // ── shadcn/scrollxui semantic tokens, mapped onto the Isla
                 // brand palette above so imported ui/ components (Table,
                 // Pagination, Button, Badge, DropdownMenu…) match the rest
                 // of the site instead of shadcn's default neutral theme.
-                background: '#fdf7ef',
-                foreground: '#2b2723',
-                card: { DEFAULT: '#ffffff', foreground: '#2b2723' },
-                popover: { DEFAULT: '#ffffff', foreground: '#2b2723' },
-                primary: { DEFAULT: '#2b2723', foreground: '#fdf7ef' },
-                secondary: { DEFAULT: '#f2dcdd', foreground: '#c17579' },
-                muted: { DEFAULT: '#f1ece3', foreground: '#6b6259' },
-                accent: { DEFAULT: '#e6e9db', foreground: '#2b2723' },
+                // Driven by the same channel variables as the brand colours, so
+                // imported ui/ components repaint with `.dark` too (the talent
+                // deck is the only place that flips) instead of staying light.
+                background: 'rgb(var(--c-cream) / <alpha-value>)',
+                foreground: 'rgb(var(--c-ink) / <alpha-value>)',
+                card: { DEFAULT: 'rgb(var(--c-white) / <alpha-value>)', foreground: 'rgb(var(--c-ink) / <alpha-value>)' },
+                popover: { DEFAULT: 'rgb(var(--c-white) / <alpha-value>)', foreground: 'rgb(var(--c-ink) / <alpha-value>)' },
+                primary: { DEFAULT: 'rgb(var(--c-ink) / <alpha-value>)', foreground: 'rgb(var(--c-cream) / <alpha-value>)' },
+                secondary: { DEFAULT: 'rgb(var(--c-rose-soft) / <alpha-value>)', foreground: 'rgb(var(--c-rose-deep) / <alpha-value>)' },
+                muted: { DEFAULT: 'rgb(var(--c-muted) / <alpha-value>)', foreground: 'rgb(var(--c-ink-soft) / <alpha-value>)' },
+                accent: { DEFAULT: 'rgb(var(--c-sage-soft) / <alpha-value>)', foreground: 'rgb(var(--c-ink) / <alpha-value>)' },
                 destructive: { DEFAULT: '#b23b3b', foreground: '#ffffff' },
-                border: 'rgba(43, 39, 35, 0.16)',
-                input: 'rgba(43, 39, 35, 0.16)',
-                ring: '#2b2723',
+                border: 'rgb(var(--c-hairline) / var(--hairline-alpha))',
+                input: 'rgb(var(--c-hairline) / var(--hairline-alpha))',
+                ring: 'rgb(var(--c-ink) / <alpha-value>)',
             },
             fontFamily: {
                 // Satoshi → display / headings, Geist → body / UI
